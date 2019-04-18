@@ -132,6 +132,8 @@ namespace Momoya
         //移動する関数
         public abstract void Move();
 
+        //HP0のとき終了する処理をかく
+
         //何かと当たった時の関数
         protected void OnCollisionStay(Collision collision)
         {
