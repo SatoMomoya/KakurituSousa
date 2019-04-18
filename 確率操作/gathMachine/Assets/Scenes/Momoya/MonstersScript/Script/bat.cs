@@ -5,14 +5,25 @@ using UnityEngine;
 
 namespace Momoya
 {
-    public class bat :  Monster
+    public class bat :  Enemy
     {
-       
+
 
         public override void Move()
         {
-            Debug.Log("コウモリ  " + rarity);
-            //vec.x = -1.0f;
+            //vec.x-=0.01f;
+            
+            // Finish();
+            //Debug.Log("コウモリ  " + rarity);
+            ////vec.x = -1.0f;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(collision.transform.tag == "Player")
+            {
+                Finish();
+            }
         }
 
     }
