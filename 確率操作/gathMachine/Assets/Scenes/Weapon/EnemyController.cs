@@ -10,7 +10,7 @@ public class EnemyController : Momoya.Monster
     private bool damageFlag;    //ダメージを受けたかどうかのフラグ
     private bool visionFlag;    //視界に入ったかどうかのフラグ
     private bool attackFlag;    //攻撃フラグ
-    private EnemyVision enemyVision;
+    //private EnemyVision enemyVision;
     private EnemyAttackZone enemyAttackZone;
     private SwordController swordController;
 
@@ -23,10 +23,17 @@ public class EnemyController : Momoya.Monster
     public int buildUpPowerTime;  //突進前の溜めの時間
 
     public float scale;
+
+    public float floorDistanceX;
+
+    private bool lastGroundFlag;
+
+   
+    //float count;
     //初期化
     public override void Initialize()
     {
-        enemyVision = FindObjectOfType<EnemyVision>();
+        //enemyVision = FindObjectOfType<EnemyVision>();
         enemyAttackZone = FindObjectOfType<EnemyAttackZone>();
         swordController = FindObjectOfType<SwordController>();
         flag.Off((uint)StateFlag.Chase);
@@ -37,18 +44,23 @@ public class EnemyController : Momoya.Monster
         knockBackCount = 0;
         rushAttackCount = 0;
         buildUpPowerCount = 0;
+        lastGroundFlag = false;
+        //count = 0;
+      
     }
 
     //移動
     public override void Move()
     {
+       // count+=0.1f;
+        //vec.y = Mathf.Sin(count);
         //進む向きで画像を反転する
         transform.localScale = new Vector3(scale * (vec.x / Math.Abs(vec.x)), transform.localScale.y, transform.localScale.z);
 
         if (visionFlag)
         {
             flag.On((uint)StateFlag.Chase);
-            playerPos = enemyVision.PlayerPos;
+            //playerPos = enemyVision.PlayerPos;
         }
         else
         {
@@ -61,17 +73,16 @@ public class EnemyController : Momoya.Monster
             {
                 if (flag.Is((uint)StateFlag.Chase))
                 {
+                    //追いかける
                     Chase();
                 }
                 else
                 {
+                    //徘徊
                     Loiter();
                 }
             }
-            else
-            {
-                RushAttack();
-            }
+           
 
         }
         else
@@ -81,11 +92,19 @@ public class EnemyController : Momoya.Monster
 
         }
 
-        Debug.Log((vec.x));
-        Debug.DrawLine(new Vector3(transform.position.x + 1, transform.position.y, 0), new Vector3(transform.position.x + 1, transform.position.y - 2, 0), Color.red);
-        Debug.DrawLine(new Vector3(transform.position.x - 1, transform.position.y, 0), new Vector3(transform.position.x - 1, transform.position.y - 2, 0), Color.red);
-        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x - 2, transform.position.y, 0), Color.red);
-        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x + 2, transform.position.y, 0), Color.red);
+        if(!damageFlag)
+        {
+            if (attackFlag)
+            {
+                RushAttack();
+            }
+        }
+        
+
+        Debug.DrawLine(new Vector3(transform.position.x + floorDistanceX, transform.position.y, 0), new Vector3(transform.position.x + floorDistanceX + 0.4f, transform.position.y - 1, 0), Color.red);
+        Debug.DrawLine(new Vector3(transform.position.x - floorDistanceX, transform.position.y, 0), new Vector3(transform.position.x - floorDistanceX - 0.4f, transform.position.y - 1, 0), Color.red);
+        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x - 0.6f, transform.position.y, 0), Color.red);
+        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x + 0.6f, transform.position.y, 0), Color.red);
 
     }
 
@@ -95,34 +114,37 @@ public class EnemyController : Momoya.Monster
         if (transform.position.x > playerPos.x)
         {
             vec.x = -2;
+            
         }
 
         if (transform.position.x < playerPos.x)
         {
             vec.x = 2;
+            
         }
     }
 
     //徘徊
     private void Loiter()
     {
+
         //右の地面判定
-        if (!Physics.Linecast(new Vector3(transform.position.x + 1, transform.position.y, 0), new Vector3(transform.position.x + 1, transform.position.y - 1, 0), layerMask))
+        if (!Physics.Linecast(new Vector3(transform.position.x + floorDistanceX, transform.position.y, 0), new Vector3(transform.position.x + floorDistanceX +0.4f, transform.position.y - 1, 0), layerMask))
         {
-            vec.x = -1;
+            vec.x = -1;  
         }
         //左の地面判定
-        if (!Physics.Linecast(new Vector3(transform.position.x - 1, transform.position.y, 0), new Vector3(transform.position.x - 1, transform.position.y - 1, 0), layerMask))
+        if (!Physics.Linecast(new Vector3(transform.position.x - floorDistanceX, transform.position.y, 0), new Vector3(transform.position.x - floorDistanceX -0.4f, transform.position.y - 1, 0), layerMask))
         {
             vec.x = 1;
         }
-        //右の地面判定
-        if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x + 1, transform.position.y, 0), layerMask))
+        //右の壁判定
+        if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x + 0.6f, transform.position.y, 0), layerMask))
         {
             vec.x = -1;
         }
-        //左の地面判定
-        if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x - 1, transform.position.y, 0), layerMask))
+        //左の壁判定
+        if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x - 0.6f, transform.position.y, 0), layerMask))
         {
             vec.x = 1;
         }
@@ -209,6 +231,28 @@ public class EnemyController : Momoya.Monster
             {
                 vec.x = -1;
             }
+        }
+    }
+
+    public void OnTriggerStay(Collider other)
+    {
+        if (other.transform.tag == "Player")
+        {
+            //視界に入っている間
+            visionFlag = true;
+            playerPos = other.transform.position;
+            attackFlag = true;
+            Debug.Log("見えてる");
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.transform.tag == "Player")
+        {
+            //視界から出たら
+            visionFlag = false;
+            Debug.Log("見えてない");
         }
     }
 

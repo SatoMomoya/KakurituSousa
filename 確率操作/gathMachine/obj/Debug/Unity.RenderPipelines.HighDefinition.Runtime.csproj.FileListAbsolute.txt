@@ -605,3 +605,5 @@ C:\Users\s172137\Documents\YakinikuTabetai\最終的に出来上がったプロ�
 C:\Users\s172137\Documents\YakinikuTabetai\最終的に出来上がったプロジェクト\iago\gathMachine\obj\Debug\Unity.RenderPipelines.HighDefinition.Runtime.csproj.CopyComplete
 C:\Users\s172137\Documents\YakinikuTabetai\最終的に出来上がったプロジェクト\iago\gathMachine\obj\Debug\Unity.RenderPipelines.HighDefinition.Runtime.dll
 C:\Users\s172137\Documents\YakinikuTabetai\最終的に出来上がったプロジェクト\iago\gathMachine\obj\Debug\Unity.RenderPipelines.HighDefinition.Runtime.pdb
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.HighDefinition.Runtime.dll
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.HighDefinition.Runtime.pdb

@@ -6,10 +6,12 @@ public class EnemyVision : MonoBehaviour
 {
     private EnemyController enemyController;
     private Vector3 playerPos;
+    private bool visionFlag;
     // Start is called before the first frame update
     void Start()
     {
         enemyController = FindObjectOfType<EnemyController>();
+        visionFlag = false;
     }
 
     // Update is called once per frame
@@ -23,8 +25,10 @@ public class EnemyVision : MonoBehaviour
         if(other.transform.tag == "Player")
         {
             //視界に入っている間
-                enemyController.VisionFlag = true;
-                playerPos = other.transform.position;
+            visionFlag = true;
+            Debug.Log("見えた");
+            enemyController.VisionFlag = true;
+            playerPos = other.transform.position;
         }
     }
 
@@ -33,11 +37,17 @@ public class EnemyVision : MonoBehaviour
         if (other.transform.tag == "Player")
         {
             //視界から出たら
-          
-                enemyController.VisionFlag = false;
-
+            visionFlag = false;
+            enemyController.VisionFlag = false;
+                
               
         }
+    }
+
+    public bool VisionFlag
+    {
+        get { return visionFlag; }
+        set { visionFlag = value; }
     }
 
     public Vector3 PlayerPos

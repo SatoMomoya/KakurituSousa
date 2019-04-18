@@ -26,7 +26,7 @@ public class EnemyAttackZone : MonoBehaviour
             {
                 //攻撃範囲に入ったら
 
-                enemyController.AttackFlag = true;
+                //enemyController.AttackFlag = true;
                 playerPos = other.transform.position;
             }  
         }

@@ -291,7 +291,7 @@ namespace Momoya
             }
 
             rarity = rarityCount / (int)HaveItem.More ;
-            Debug.Log("PlayerRarity" + rarity);
+            //Debug.Log("PlayerRarity" + rarity);
         }
 
         //プレイヤーのステータスを設定する
@@ -311,9 +311,9 @@ namespace Momoya
 
             status = statustmp;
             //確認用
-            Debug.Log("HP" + status.hp);
-            Debug.Log("Attack" + status.attack);
-            Debug.Log("Speed" + status.speed);
+            //Debug.Log("HP" + status.hp);
+            //Debug.Log("Attack" + status.attack);
+            //Debug.Log("Speed" + status.speed);
         }
 
         //アイテムの変更

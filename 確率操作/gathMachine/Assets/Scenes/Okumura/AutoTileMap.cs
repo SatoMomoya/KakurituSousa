@@ -251,6 +251,9 @@ public class AutoTileMap : MonoBehaviour
                 cube.tag = m_tagName;
                 cube2.tag = "Wall";
 
+                //レイヤーの追加
+                cube.layer = 9;
+
                 // コライダーのサイズを決める
                 cube.GetComponent<BoxCollider>().size = new Vector3(0.95f, 0.2f, 1);
                 cube.GetComponent<BoxCollider>().center = new Vector3(0, 0.4f, 0);
