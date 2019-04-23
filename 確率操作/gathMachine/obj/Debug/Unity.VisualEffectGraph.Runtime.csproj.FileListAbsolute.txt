@@ -897,3 +897,6 @@ C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.Visu
 C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.VisualEffectGraph.Runtime.csproj.CopyComplete
 C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.VisualEffectGraph.Runtime.dll
 C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.VisualEffectGraph.Runtime.pdb
+C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.VisualEffectGraph.Runtime.csprojResolveAssemblyReference.cache
+C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.VisualEffectGraph.Runtime.dll
+C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.VisualEffectGraph.Runtime.pdb

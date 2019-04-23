@@ -19,9 +19,17 @@ public class RaritySave : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player.GoalFlag())
+        if (player != null)
         {
-            rarity = player.Rarity;
+
+            if (player.GoalFlag())
+            {
+                rarity = player.Rarity;
+            }
+        }
+        else
+        {
+            return;
         }
     }
 }

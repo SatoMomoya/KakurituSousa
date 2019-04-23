@@ -9,6 +9,7 @@ TagManager:
   - Goal
   - Monster
   - Wall
+  - GameDirector
   layers:
   - Default
   - TransparentFX

@@ -61,9 +61,9 @@ namespace Momoya
 
 
         Color color;
-
-       // Texture2D screenTexture;
-       // public Camera camera;
+      public  ResultGo result;
+        // Texture2D screenTexture;
+        // public Camera camera;
 
 
         //public void Awake()
@@ -131,7 +131,7 @@ namespace Momoya
 
                     if(time > goalTime)
                     {
-                        SceneManager.LoadScene("TunagiScene");
+                        result.Flag();
                     }
 
 

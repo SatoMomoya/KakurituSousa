@@ -924,3 +924,6 @@ C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.Shad
 C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.ShaderGraph.Editor.csproj.CopyComplete
 C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.ShaderGraph.Editor.dll
 C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.ShaderGraph.Editor.pdb
+C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.ShaderGraph.Editor.csprojResolveAssemblyReference.cache
+C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.ShaderGraph.Editor.dll
+C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.ShaderGraph.Editor.pdb
