@@ -72,10 +72,10 @@ namespace Momoya
         void Update()
         {
 
-
+            Move();         //移動の処理
             PositionCtrl(); //ポジションの処理
 
-            Move();         //移動の処理
+            
         }
      
         
@@ -134,18 +134,7 @@ namespace Momoya
 
         //HP0のとき終了する処理をかく
 
-        //何かと当たった時の関数
-        protected void OnCollisionStay(Collision collision)
-        {
-            //当たった何かのタグを調べる
-            switch (collision.transform.tag)
-            {
-                case "Ground": flag.On((uint)StateFlag.Jump);   break; //groundと触れていればジャンプフラグをtrueにする
-                case "Goal":flag.On((uint)StateFlag.Goal); break;
-            }
-
-           
-        }
+     
 
         //何かと離れたときの関数
         protected void OnCollisionExit(Collision collision)
@@ -153,14 +142,13 @@ namespace Momoya
             //離れた何かのタグを調べる
             switch (collision.transform.tag)
             {
-                case "Ground": flag.Off((uint)StateFlag.Jump); break; //groundを離れたらジャンプフラグoffにする
+                //case "Ground": flag.Off((uint)StateFlag.Jump); break; //groundを離れたらジャンプフラグoffにする
             }
         }
 
         public bool GoalFlag()
         {
-            return flag.Is((uint)StateFlag.Goal
-                );
+            return flag.Is((uint)StateFlag.Goal);
         }
     }
 

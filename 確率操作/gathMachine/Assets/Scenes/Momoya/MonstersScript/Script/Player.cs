@@ -33,8 +33,9 @@ namespace Momoya
         
 
         public  const float cooltimeCount = 0.0f; //技を出したときにクールタイムを
-       //変数の定義
-  
+                                                  //変数の定義
+
+        public ResultGo result;
 
         public Item[] haveItem = new Item[(int)HaveItem.More];
         [SerializeField]
@@ -59,11 +60,17 @@ namespace Momoya
         private float goalTime = 1.0f;
         private float time;
 
-
+        public LayerMask layerMask; //レイヤーマスク
+        private float lineX;        //線の横の幅
         Color color;
-      public  ResultGo result;
-        // Texture2D screenTexture;
-        // public Camera camera;
+
+        private bool nowJump;           //ジャンプ中に壁に当たっているかどうか
+
+        private float widthLineUpY;      //横向きの上の線
+        private float widthLineDownY;    //横向きの下の線
+
+       // Texture2D screenTexture;
+       // public Camera camera;
 
 
         //public void Awake()
@@ -115,6 +122,11 @@ namespace Momoya
 
             color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             transform.GetComponent<SpriteRenderer>().color = color;
+
+            lineX = 0.2f;
+            nowJump = false;
+            widthLineUpY = 0.5f;
+            widthLineDownY = 0.8f;
         }
 
         //Move関数
@@ -127,9 +139,9 @@ namespace Momoya
                 {
                     time += Time.deltaTime;
 
+                    Debug.Log(time);
 
-
-                    if(time > goalTime)
+                   if(time > goalTime)
                     {
                         result.Flag();
                     }
@@ -138,7 +150,7 @@ namespace Momoya
                    
                     return;
                 }
-
+                //リセット用(デバッグ)
                 if(Input.GetKeyDown(KeyCode.R))
                 {
                     SceneManager.LoadScene("Stagetest");
@@ -154,7 +166,7 @@ namespace Momoya
                 //十字キーの入力をセット
                 vec.x = Input.GetAxis("Horizontal");
                 vec.y = Input.GetAxis("Vertical");
-
+                
                 //プレイヤーの向きの転換
                 if(vec.x <= -0.1f)
                 {
@@ -166,6 +178,41 @@ namespace Momoya
                 }
 
 
+                //ジャンプ中に横壁に当たった時
+                if (nowJump)
+                {
+                    //速度を0に
+                    vec.x = 0;
+                    //右の線が当たっていて
+                    if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x + 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
+                    {
+                        //左キーを押されたら移動
+                        if (Input.GetKey(KeyCode.LeftArrow))
+                        {
+                            vec.x = Input.GetAxis("Horizontal");
+                            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+                        }
+                    }
+                    
+                    
+                    //左の線が当たっていて
+                    if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x - 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
+                    {
+                        
+                        //右キーを押されたら移動
+                        if (Input.GetKey(KeyCode.RightArrow))
+                        {
+                            vec.x = Input.GetAxis("Horizontal");
+                            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
+                           
+                        }
+                    }
+
+                }
+               
                 //ベクトルxが0.0じゃない場合動いている
                 if (Mathf.Abs(vec.x) != 0.0f)
                 {
@@ -187,10 +234,12 @@ namespace Momoya
 
                 if (!flag.Is((uint)StateFlag.Jump))
                 {
+                    
                     animator.SetBool("IsJump", true);
                     //重力を消す
-                    GetComponent<Rigidbody>().useGravity = false;
+                   // GetComponent<Rigidbody>().useGravity = false;
 
+                    //落ち始めたら重力を変える
                     if (!jumpFallFalg)
                     {
                         GetComponent<Rigidbody>().AddForce(gravity, ForceMode.Acceleration);
@@ -201,6 +250,7 @@ namespace Momoya
                     }
 
                     float posY = transform.position.y - lastPos.y;
+                    //落ち始めているかどうか
                     if (posY > 0)
                     {
                         animator.SetBool("IsJump", false);
@@ -214,9 +264,19 @@ namespace Momoya
                     animator.SetBool("IsJumpDown", false);
                 }
 
-                //   Debug.Log(vec);
-
                 Jump(); //ジャンプ
+
+                //下の赤い線
+                Debug.DrawLine(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - 2, transform.position.z), Color.red);
+                Debug.DrawLine(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - 2, transform.position.z), Color.red);
+
+                //上の青い横の線
+                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), Color.blue);
+                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), Color.blue);
+                //下の青い横の線
+                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x + 0.5f, transform.position.y - widthLineDownY, transform.position.z), Color.blue);
+                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x - 0.5f, transform.position.y - widthLineDownY, transform.position.z), Color.blue);
+
 
                 //最後の座標を入れる
                 lastPos = transform.position;
@@ -319,7 +379,7 @@ namespace Momoya
         //アイテムの変更
         public void ChangeItem(Item item,int itemgroup)
         {
-            Destroy(haveItem[(int)itemgroup].gameObject);
+           // Destroy(haveItem[(int)itemgroup].gameObject);
             haveItem[(int)itemgroup] = item;
         }
 
@@ -327,14 +387,99 @@ namespace Momoya
         //ジャンプするための関数
         private void Jump()
         {
+            //地面についている
+            if (Physics.Linecast(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - 2, transform.position.z), layerMask)||
+                Physics.Linecast(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - 2, transform.position.z), layerMask))
+            {
+               
+                flag.On((uint)StateFlag.Jump);
+                
+            }
+
+            //地面から離れた
+            if (!Physics.Linecast(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - 2, transform.position.z), layerMask)&&
+                !Physics.Linecast(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - 2, transform.position.z), layerMask))
+            {
+               
+                flag.Off((uint)StateFlag.Jump);
+                
+            }
 
             //スペースキーを押された時、地面についていればジャンプする
             if (Input.GetKeyDown(KeyCode.Space) && flag.Is((uint)StateFlag.Jump))
             {
                 GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
-                
+
             }
+            
+                
+            
         }
+
+        public  void OnCollisionStay(Collision collision)
+        {
+            if (collision.transform.tag == "Goal")
+            {
+                flag.On((uint)StateFlag.Goal);
+            }
+            //当たった何かのタグを調べる
+            switch (collision.transform.tag)
+            {
+                //case "Ground": flag.On((uint)StateFlag.Jump);   break; //groundと触れていればジャンプフラグをtrueにする
+                case "Goal":
+                    flag.On((uint)StateFlag.Goal);
+                    Debug.Log("Goal");
+                    break;
+            }
+            //ジャンプ中
+            if (!flag.Is((uint)StateFlag.Jump))
+            {
+                if(vec.x > 0)
+                {
+                    //プレイヤーの横の線の当たり判定
+                    if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x + 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
+                    {
+                        //壁か床に当たったら
+                        if (collision.transform.tag == "Wall" || collision.transform.tag == "Ground")
+                        {
+                            nowJump = true;
+                        }
+                        else
+                        {
+                            nowJump = false;
+                        }
+                    }
+                }
+                else
+                {
+                    //プレイヤーの横の線の当たり判定
+                    if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x - 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
+                    {
+                        //壁か床に当たったら
+                        if (collision.transform.tag == "Wall" || collision.transform.tag == "Ground")
+                        {
+                            nowJump = true;
+                        }
+                        else
+                        {
+                            nowJump = false;
+                        }
+                    }
+                
+                }
+            }
+            else
+            {
+                nowJump = false;
+            }
+
+             
+        }
+
 
         //何が当たったのか知らせるプロパティ
         public Collision HitObject
@@ -346,7 +491,7 @@ namespace Momoya
 
         
 
-
+ 
     }
 
 }

@@ -10,15 +10,15 @@ public class ResultGo : MonoBehaviour
     float time;
     int PlayerRaity;
     int conditions;
-    public GameDirector gameDirector;
+    public GameDirector changeScene;
     public Momoya.Player player;
     bool a;
     // Start is called before the first frame update
     void Start()
     {
 
-        PlayerRaity = player.StartRarity;
-        conditions = gameDirector.GetRarity();
+        PlayerRaity = player.Rarity;
+     
         a = false;
     }
 
@@ -26,11 +26,12 @@ public class ResultGo : MonoBehaviour
     void Update()
     {
         // conditions.gameObject.GetComponent<>;
+        PlayerRaity = player.Rarity;
 
+        conditions = (int)changeScene.selectGyat;
 
-
-       
     }
+    //条件を満たしていなければセレクト画面へ
     public void Flag()
     {
 

@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Light
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Core.Editor", "Unity.RenderPipelines.Core.Editor.csproj", "{CA00606D-7E32-A0E4-6460-C9ACDA81E61B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{B1A90743-A348-06A0-B359-CC5D3D7C288E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{CA00606D-7E32-A0E4-6460-C9ACDA81E61B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA00606D-7E32-A0E4-6460-C9ACDA81E61B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA00606D-7E32-A0E4-6460-C9ACDA81E61B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1A90743-A348-06A0-B359-CC5D3D7C288E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1A90743-A348-06A0-B359-CC5D3D7C288E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1A90743-A348-06A0-B359-CC5D3D7C288E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A90743-A348-06A0-B359-CC5D3D7C288E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

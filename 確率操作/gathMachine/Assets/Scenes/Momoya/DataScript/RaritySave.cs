@@ -4,32 +4,32 @@ using UnityEngine;
 
 public class RaritySave : MonoBehaviour
 {
-    [SerializeField]
-    Momoya.Player player;
+    //[SerializeField]
+    //Momoya.Player player;
 
     
-    public static int rarity = 0;
+    //public static int rarity = 0;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        DontDestroyOnLoad(this);
-    }
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    DontDestroyOnLoad(this);
+    //}
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (player != null)
-        {
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    if (player != null)
+    //    {
 
-            if (player.GoalFlag())
-            {
-                rarity = player.Rarity;
-            }
-        }
-        else
-        {
-            return;
-        }
-    }
+    //        if (player.GoalFlag())
+    //        {
+    //            rarity = player.Rarity;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        return;
+    //    }
+    //}
 }

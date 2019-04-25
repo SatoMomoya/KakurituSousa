@@ -65,7 +65,7 @@ public class AutoTileMap : MonoBehaviour
         {
             // 乱数の初期化
             int row = UnityEngine.Random.Range(1, m_rows);
-            int column = UnityEngine.Random.Range(0, m_columns);
+            int column = UnityEngine.Random.Range(1, m_columns);
             // アイテムの描画
             Item(column, row);
         }
@@ -76,7 +76,7 @@ public class AutoTileMap : MonoBehaviour
         {
             // 乱数の初期化
             int row = UnityEngine.Random.Range(1, m_rows);
-            int column = UnityEngine.Random.Range(0, m_columns);
+            int column = UnityEngine.Random.Range(1, m_columns);
             // アイテムの描画
             Enemy(column, row);
         }
@@ -187,8 +187,8 @@ public class AutoTileMap : MonoBehaviour
         else
         {
             // 乱数の初期化
-            int r = UnityEngine.Random.Range(0, m_rows);
-            int c = UnityEngine.Random.Range(0, m_columns);
+            int r = UnityEngine.Random.Range(1, m_rows);
+            int c = UnityEngine.Random.Range(1, m_columns);
             // 敵の描画
             Enemy(c, r);
         }
@@ -256,8 +256,8 @@ public class AutoTileMap : MonoBehaviour
         else
         {
             // 乱数の初期化
-            int r = UnityEngine.Random.Range(0, m_rows);
-            int c = UnityEngine.Random.Range(0, m_columns);
+            int r = UnityEngine.Random.Range(1, m_rows);
+            int c = UnityEngine.Random.Range(1, m_columns);
             // アイテムの描画
             Item(c, r);
         }
@@ -322,6 +322,7 @@ public class AutoTileMap : MonoBehaviour
 
                 //レイヤーの追加
                 cube.layer = 9;
+                cube2.layer = 9;
 
                 // コライダーのサイズを決める
                 cube.GetComponent<BoxCollider>().size = new Vector3(1.0f, 0.1f, 1);
