@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 //----------------------------------------------------------------------
 //!
 //! @brief 自動タイルマップ
@@ -33,12 +32,15 @@ public class AutoTileMap : MonoBehaviour
     public string m_tagName; // タグ
     public int m_item;  // アイテムの出現の数
     public UnityEngine.GameObject[] m_itemObject; // アイテムのオブジェクト
+    public int m_enemy; // 敵の出現の数
+    public UnityEngine.GameObject m_enemyObject; // 敵のオブジェクト
+    public Material m_enemyMaterial; // 敵のマテリアル
     [SerializeField, Range(0, 100)]
     public int[] m_stagePercent; // ブロックの出る確率
     int m_itemNum; // アイテムの番号
 
     public Momoya.Player m_player;
-    
+
     // 初期化処理
     private void Start()
     {
@@ -69,6 +71,16 @@ public class AutoTileMap : MonoBehaviour
         }
 
 
+        // 敵の数分回す
+        for (int i = 0; i < m_enemy; i++)
+        {
+            // 乱数の初期化
+            int row = UnityEngine.Random.Range(1, m_rows);
+            int column = UnityEngine.Random.Range(0, m_columns);
+            // アイテムの描画
+            Enemy(column, row);
+        }
+
     }
 
     // 更新処理
@@ -84,48 +96,108 @@ public class AutoTileMap : MonoBehaviour
 
     }
 
-    //// グリッドの描画処理
-    //private void OnDrawGizmosSelected()
-    //{
+    // グリッドの描画処理
+    private void OnDrawGizmosSelected()
+    {
 
-    //    // オブジェクトの初期位置の取得
-    //    Vector3 position = transform.position;
-    //    // 外の線の色を決める
-    //    Gizmos.color = m_outLineColor;
-    //    // 左下から右下の線を引く
-    //    Gizmos.DrawLine(position,
-    //        position + new Vector3(m_columns * m_tileWidth, 0, 0));
-    //    // 左下から左上の線を引く
-    //    Gizmos.DrawLine(position,
-    //        position + new Vector3(0, m_rows * m_tileHeight, 0));
-    //    // 右下から右上の線を引く
-    //    Gizmos.DrawLine(position + new Vector3(m_columns * m_tileWidth, 0, 0),
-    //        position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
-    //    // 左上から右上の線を引く
-    //    Gizmos.DrawLine(position + new Vector3(0, m_rows * m_tileHeight, 0)
-    //        , position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
-    //    // マップの色を決める
-    //    Gizmos.color = m_mapLineColor;
-    //    // 列数分回す
-    //    for (float i = 1; i < m_columns; i++)
-    //    {
-    //        // 横の線を引く
-    //        Gizmos.DrawLine(position + new Vector3(i * m_tileWidth, 0, 0), position + new Vector3(i * m_tileWidth, m_rows * m_tileHeight, 0));
-    //    }
-    //    // 行数分回す
-    //    for (float i = 1; i < m_rows; i++)
-    //    {
-    //        // 縦の線を引く
-    //        Gizmos.DrawLine(position + new Vector3(0, i * m_tileHeight, 0), position + new Vector3(m_columns * m_tileWidth, i * m_tileHeight, 0));
-    //    }
+        // オブジェクトの初期位置の取得
+        Vector3 position = transform.position;
+        // 外の線の色を決める
+        Gizmos.color = m_outLineColor;
+        // 左下から右下の線を引く
+        Gizmos.DrawLine(position,
+            position + new Vector3(m_columns * m_tileWidth, 0, 0));
+        // 左下から左上の線を引く
+        Gizmos.DrawLine(position,
+            position + new Vector3(0, m_rows * m_tileHeight, 0));
+        // 右下から右上の線を引く
+        Gizmos.DrawLine(position + new Vector3(m_columns * m_tileWidth, 0, 0),
+            position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
+        // 左上から右上の線を引く
+        Gizmos.DrawLine(position + new Vector3(0, m_rows * m_tileHeight, 0)
+            , position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
+        // マップの色を決める
+        Gizmos.color = m_mapLineColor;
+        // 列数分回す
+        for (float i = 1; i < m_columns; i++)
+        {
+            // 横の線を引く
+            Gizmos.DrawLine(position + new Vector3(i * m_tileWidth, 0, 0), position + new Vector3(i * m_tileWidth, m_rows * m_tileHeight, 0));
+        }
+        // 行数分回す
+        for (float i = 1; i < m_rows; i++)
+        {
+            // 縦の線を引く
+            Gizmos.DrawLine(position + new Vector3(0, i * m_tileHeight, 0), position + new Vector3(m_columns * m_tileWidth, i * m_tileHeight, 0));
+        }
 
-    //}
+    }
+
+    // 敵の描画処理
+    private void Enemy(int row, int column)
+    {
+        // その位置のブロックの中身を入れる
+        UnityEngine.GameObject cube = UnityEngine.GameObject.Find(string.Format("AutoTile_{0}_{1}", row, column));
+
+        // そのブロックが存在してたら
+        if (cube != null)
+        {
+            // その位置の中にアイテムを入れる
+            UnityEngine.GameObject enemy = UnityEngine.GameObject.Instantiate(m_enemyObject);
+
+            // 球の作成
+            UnityEngine.GameObject sphere = UnityEngine.GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+            // 敵の位置の初期化
+            Vector3 tilePositionInLocalSpace = new Vector3((row * m_tileWidth) + (m_tileWidth / 2), ((column + 1) * m_tileHeight) + (m_tileHeight / 2), 0);
+            enemy.transform.position = transform.position + tilePositionInLocalSpace;
+
+            // 球の位置の初期化
+            sphere.transform.position = transform.position + tilePositionInLocalSpace;
+
+            // サイズの初期化
+            enemy.transform.localScale = new Vector3(m_tileWidth, m_tileHeight, 1);
+
+            // サイズの初期化
+            sphere.transform.localScale = new Vector3(m_tileWidth, m_tileHeight, 1);
+
+            // 親子関係を結ぶ
+            enemy.transform.parent = transform;
+
+            // 親子関係を結ぶ
+            sphere.transform.parent = enemy.transform;
+
+            // 敵の名前の初期化
+            enemy.name = string.Format("Enemy_{0}_{1}", row + 1, column);
+
+            // 球のなめの初期化
+            sphere.name = string.Format("Enemy_Sphere_{0}_{1}", row + 1, column);
+
+            // マテリアルの初期化
+            sphere.GetComponent<Renderer>().material = m_enemyMaterial;
+
+            // タグの追加
+            // enemy.tag = "Monster";
+
+            // レイヤーの追加
+            sphere.layer = 11;
+
+        }
+
+        else
+        {
+            // 乱数の初期化
+            int r = UnityEngine.Random.Range(0, m_rows);
+            int c = UnityEngine.Random.Range(0, m_columns);
+            // 敵の描画
+            Enemy(c, r);
+        }
+
+    }
 
     // アイテムの描画処理
     private void Item(int row, int column)
     {
-
-
         // その位置のブロックの中身を入れる
         UnityEngine.GameObject cube = UnityEngine.GameObject.Find(string.Format("AutoTile_{0}_{1}", row, column));
 
@@ -161,7 +233,7 @@ public class AutoTileMap : MonoBehaviour
             item.name = string.Format("Item_{0}_{1}", row + 1, column);
 
             // 球のなめの初期化
-            sphere.name = string.Format("Sphere_{0}_{1}", row + 1, column);
+            sphere.name = string.Format("Item_Sphere_{0}_{1}", row + 1, column);
 
             // タグの追加
             item.tag = "Item";
@@ -173,7 +245,7 @@ public class AutoTileMap : MonoBehaviour
             m_itemNum++;
 
             // 次のアイテムがなかったら
-            if(m_itemNum > 14)
+            if (m_itemNum > 14)
             {
                 // ０に戻す
                 m_itemNum = 0;
@@ -252,8 +324,8 @@ public class AutoTileMap : MonoBehaviour
                 cube.layer = 9;
 
                 // コライダーのサイズを決める
-                cube.GetComponent<BoxCollider>().size = new Vector3(0.95f, 0.2f, 1);
-                cube.GetComponent<BoxCollider>().center = new Vector3(0, 0.4f, 0);
+                cube.GetComponent<BoxCollider>().size = new Vector3(1.0f, 0.1f, 1);
+                cube.GetComponent<BoxCollider>().center = new Vector3(0, 0.45f, 0);
             }
             else
             {
