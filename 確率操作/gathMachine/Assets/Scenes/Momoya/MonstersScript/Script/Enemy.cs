@@ -17,8 +17,8 @@ namespace Momoya
             NUM
         }
         //定数の宣言
-        public GameObject dropItem;
-
+        public ItemBox dropItem;
+        private GameObject dropObject;
 
         //変数の宣言
         [SerializeField]
@@ -67,10 +67,12 @@ namespace Momoya
         //アイテムをドロップさせる関数
         public void DropItem()
         {
-            GameObject go = Instantiate(dropItem) as GameObject;
-            //ドロップさせたアイテムのレアリティを変える
-            go.GetComponent<Item>().Rarity = this.rarity;
-            go.transform.position = this.transform.position ;
+            dropObject = dropItem.GiveRandomObjectBox();
+
+            GameObject go = Instantiate(dropObject) as GameObject;
+            ////ドロップさせたアイテムのレアリティを変える
+            //go.GetComponent<Item>().Rarity = this.rarity;
+            go.transform.position = this.transform.position;
         }
     }
 }
