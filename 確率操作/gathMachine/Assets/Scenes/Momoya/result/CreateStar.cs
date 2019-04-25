@@ -27,17 +27,20 @@ public class CreateStar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        if(geneFlag)
+        //ロードされたら星の生成を始める
+        if(load.LoadFlag())
         {
-            return;
-        }
-        if (time > createtime)
-        {
+            time += Time.deltaTime;
+            if (geneFlag)
+            {
+                return;
+            }
+            if (time > createtime)
+            {
 
                 for (int i = 0; i < maxRarity; i++)
                 {
-                    if (i < RaritySave.rarity)
+                    if (i < player.Rarity)
                     {
                         GameObject go = Instantiate(star001) as GameObject;
                         go.transform.position = new Vector3(transform.position.x + (i * width), transform.position.y, transform.position.z);
@@ -53,6 +56,9 @@ public class CreateStar : MonoBehaviour
                 }
                 geneFlag = true;
             }
-        
+
+        }
+
+
     }
 }

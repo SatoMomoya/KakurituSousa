@@ -46,7 +46,7 @@ namespace Momoya
         void Start()
         {
             fileName = "PlayerData.csv";
-            filePath = Application.dataPath + @"\Scenes\Data\" + fileName;
+            filePath = "exe\\Data\\" + fileName;
             _csvData = new List<string>();
 
             saveFlag = false;
@@ -80,7 +80,7 @@ namespace Momoya
             //// 名前を書き込む
             //string[] name = { "Name", "" + player.Name};
             //string namewriter = string.Join(",", name);
-             //sw.WriteLine(namewriter);
+            //sw.WriteLine(namewriter);
             //レアリティを書き込む
             string[] rarity = { "Rarity", "" + player.Rarity.ToString() };
             string raritywrite = string.Join(",", rarity);

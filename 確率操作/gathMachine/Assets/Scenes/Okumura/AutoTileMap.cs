@@ -13,9 +13,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using CBX.Unity.Editors.Editor;
-
-using UnityEditor;
 
 
 //----------------------------------------------------------------------
@@ -87,42 +84,42 @@ public class AutoTileMap : MonoBehaviour
 
     }
 
-    // グリッドの描画処理
-    private void OnDrawGizmosSelected()
-    {
+    //// グリッドの描画処理
+    //private void OnDrawGizmosSelected()
+    //{
 
-        // オブジェクトの初期位置の取得
-        Vector3 position = transform.position;
-        // 外の線の色を決める
-        Gizmos.color = m_outLineColor;
-        // 左下から右下の線を引く
-        Gizmos.DrawLine(position,
-            position + new Vector3(m_columns * m_tileWidth, 0, 0));
-        // 左下から左上の線を引く
-        Gizmos.DrawLine(position,
-            position + new Vector3(0, m_rows * m_tileHeight, 0));
-        // 右下から右上の線を引く
-        Gizmos.DrawLine(position + new Vector3(m_columns * m_tileWidth, 0, 0),
-            position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
-        // 左上から右上の線を引く
-        Gizmos.DrawLine(position + new Vector3(0, m_rows * m_tileHeight, 0)
-            , position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
-        // マップの色を決める
-        Gizmos.color = m_mapLineColor;
-        // 列数分回す
-        for (float i = 1; i < m_columns; i++)
-        {
-            // 横の線を引く
-            Gizmos.DrawLine(position + new Vector3(i * m_tileWidth, 0, 0), position + new Vector3(i * m_tileWidth, m_rows * m_tileHeight, 0));
-        }
-        // 行数分回す
-        for (float i = 1; i < m_rows; i++)
-        {
-            // 縦の線を引く
-            Gizmos.DrawLine(position + new Vector3(0, i * m_tileHeight, 0), position + new Vector3(m_columns * m_tileWidth, i * m_tileHeight, 0));
-        }
+    //    // オブジェクトの初期位置の取得
+    //    Vector3 position = transform.position;
+    //    // 外の線の色を決める
+    //    Gizmos.color = m_outLineColor;
+    //    // 左下から右下の線を引く
+    //    Gizmos.DrawLine(position,
+    //        position + new Vector3(m_columns * m_tileWidth, 0, 0));
+    //    // 左下から左上の線を引く
+    //    Gizmos.DrawLine(position,
+    //        position + new Vector3(0, m_rows * m_tileHeight, 0));
+    //    // 右下から右上の線を引く
+    //    Gizmos.DrawLine(position + new Vector3(m_columns * m_tileWidth, 0, 0),
+    //        position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
+    //    // 左上から右上の線を引く
+    //    Gizmos.DrawLine(position + new Vector3(0, m_rows * m_tileHeight, 0)
+    //        , position + new Vector3(m_columns * m_tileWidth, m_rows * m_tileHeight, 0));
+    //    // マップの色を決める
+    //    Gizmos.color = m_mapLineColor;
+    //    // 列数分回す
+    //    for (float i = 1; i < m_columns; i++)
+    //    {
+    //        // 横の線を引く
+    //        Gizmos.DrawLine(position + new Vector3(i * m_tileWidth, 0, 0), position + new Vector3(i * m_tileWidth, m_rows * m_tileHeight, 0));
+    //    }
+    //    // 行数分回す
+    //    for (float i = 1; i < m_rows; i++)
+    //    {
+    //        // 縦の線を引く
+    //        Gizmos.DrawLine(position + new Vector3(0, i * m_tileHeight, 0), position + new Vector3(m_columns * m_tileWidth, i * m_tileHeight, 0));
+    //    }
 
-    }
+    //}
 
     // アイテムの描画処理
     private void Item(int row, int column)
