@@ -109,7 +109,7 @@ namespace Momoya
                 string[] body = { "Body", "" + player.GetComponent<Player>().haveItem[(int)Player.HaveItem.Body].Name };
                 string bodywrite = string.Join(",", body);
                 sw.WriteLine(bodywrite);
-
+           
             // StreamWriterを閉じる
             sw.Close();
 

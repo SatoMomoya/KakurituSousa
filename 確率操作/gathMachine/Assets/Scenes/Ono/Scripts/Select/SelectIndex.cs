@@ -49,8 +49,8 @@ public class SelectIndex : MonoBehaviour
             //シーンの移行
             SceneManager.LoadScene("Stagetest");
         }
-       
-      
+        GetRarity();
+        Debug.Log(rarity.selectGyat);
     }
 
     void Move()
@@ -136,16 +136,16 @@ public class SelectIndex : MonoBehaviour
         {
 
             case 1:
-                rarity.selectGyat = GameDirector.SelectGtyat.tutorial;
+                rarity.selectGyat = GameDirector.SelectGtyat.raity5;
                 break;
             case 2:
-                rarity.selectGyat = GameDirector.SelectGtyat.nomal;
-                break;
-            case 3:
                 rarity.selectGyat = GameDirector.SelectGtyat.pickUp;
                 break;
+            case 3:
+                rarity.selectGyat = GameDirector.SelectGtyat.nomal;
+                break;
             case 4:
-                rarity.selectGyat = GameDirector.SelectGtyat.raity5;
+                rarity.selectGyat = GameDirector.SelectGtyat.tutorial;
                 break;
         }
         return (int)rarity.selectGyat;

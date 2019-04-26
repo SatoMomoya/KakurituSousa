@@ -3,11 +3,11 @@ PlayerPath?
 C:/Users/s172091/Documents/project/確率操作/gathMachine/exe/gathMachine.exe
 SceneListBegin?
 Assets/Scenes/teramotoTeast.unity
+Assets/Scenes/SelectScene.unity
 Assets/Scenes/Stagetest.unity
+Assets/Scenes/TunagiScene.unity
 Assets/Scenes/Goto/Result.unity
 Assets/Scenes/SampleScene.unity
-Assets/Scenes/TunagiScene.unity
-Assets/Scenes/SelectScene.unity
 SceneListEnd?
 a1f19ad47d3094e235f21b74dfc423a8 Unity.Postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.PostProcessLayer
 1095ec9f3eeae7eb7d180ab9e73b4cb3 Unity.RenderPipelines.HighDefinition.Runtime.dll:UnityEngine.Experimental.Rendering.HDPipeline.ExponentialFog

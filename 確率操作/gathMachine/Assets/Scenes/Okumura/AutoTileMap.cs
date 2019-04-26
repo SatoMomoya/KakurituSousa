@@ -176,6 +176,9 @@ public class AutoTileMap : MonoBehaviour
             // マテリアルの初期化
             sphere.GetComponent<Renderer>().material = m_enemyMaterial;
 
+           
+
+
             // タグの追加
             // enemy.tag = "Monster";
 
@@ -241,6 +244,9 @@ public class AutoTileMap : MonoBehaviour
             // レイヤーの追加
             sphere.layer = 11;
 
+
+             //トリガーに設定
+            sphere.GetComponent<SphereCollider>().isTrigger = true;
             // 次のアイテム
             m_itemNum++;
 

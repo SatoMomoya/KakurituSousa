@@ -102,22 +102,23 @@ namespace Momoya
 
         }
 
-        public void OnCollisionStay(Collision collision)
+       
+        public void OnTriggerStay(Collider other)
         {
-           if (collision.transform.tag == "Player")
+            if (other.transform.tag == "Player")
             {
                 changeFlag = true;
             }
         }
-
-        public void OnCollisionExit(Collision collision)
+        public void OnTriggerExit(Collider other)
         {
-            if(collision.transform.tag == "Player")
+            if (other.transform.tag == "Player")
             {
                 changeFlag = false;
             }
-
         }
+
+       
 
         //HPのプロパティ
         public int HP

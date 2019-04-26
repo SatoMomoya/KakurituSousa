@@ -52,7 +52,8 @@ public class CreateStar : MonoBehaviour
                         go.transform.position = new Vector3(transform.position.x + (i * width), transform.position.y, transform.position.z);
 
                     }
-
+                    Vector2 a = new Vector2(0f, 0f);
+                 
                 }
                 geneFlag = true;
             }

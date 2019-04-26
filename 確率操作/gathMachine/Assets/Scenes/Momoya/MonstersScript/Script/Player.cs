@@ -137,6 +137,8 @@ namespace Momoya
             {
                 if (flag.Is((uint)StateFlag.Goal))
                 {
+                    //ゴールしたら速度をゼロにする
+                    vec = Vector3.zero;
                     time += Time.deltaTime;
 
                     Debug.Log(time);
