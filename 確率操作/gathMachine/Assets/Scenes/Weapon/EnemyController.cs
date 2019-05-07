@@ -18,7 +18,8 @@ public class EnemyController : Momoya.Monster
     private int rushAttackCount;    //突進攻撃するカウント
     private int buildUpPowerCount;  //突進前の溜めのカウント
 
-    public int knockBackTime;     //ノックバックする時間
+    private int knockBackTime;     //ノックバックする時間
+
     public int rushAttackTime;    //突進攻撃する時間
     public int buildUpPowerTime;  //突進前の溜めの時間
 
@@ -28,12 +29,14 @@ public class EnemyController : Momoya.Monster
 
     private bool lastGroundFlag;
 
+    private GameObject player;
    
     //float count;
     //初期化
     public override void Initialize()
     {
         //enemyVision = FindObjectOfType<EnemyVision>();
+        player = GameObject.Find("Player");
         enemyAttackZone = FindObjectOfType<EnemyAttackZone>();
         swordController = FindObjectOfType<SwordController>();
         flag.Off((uint)StateFlag.Chase);
@@ -46,6 +49,7 @@ public class EnemyController : Momoya.Monster
         buildUpPowerCount = 0;
         lastGroundFlag = false;
         //count = 0;
+        knockBackTime = 15;
       
     }
 
@@ -87,7 +91,6 @@ public class EnemyController : Momoya.Monster
         }
         else
         {
-            playerPos = swordController.PlayerPos;
             KnockBack();
 
         }
@@ -156,11 +159,11 @@ public class EnemyController : Momoya.Monster
         knockBackCount++;
         if (transform.position.x > playerPos.x)
         {
-            vec.x = -5;
+            vec.x = 5;
         }
         else
         {
-            vec.x = 5;
+            vec.x = -5;
         }
 
         //画像の向きを合わせる
@@ -169,12 +172,21 @@ public class EnemyController : Momoya.Monster
         //0.5フレームノックバックする
         if (knockBackCount > knockBackTime)
         {
-            vec.x = 1;
+            
             attackFlag = false;
             damageFlag = false;
             knockBackCount = 0;
             rushAttackCount = 0;
             buildUpPowerCount = 0;
+
+            if(vec.x >= 0)
+            {
+                vec.x = 1;
+            }
+            else
+            {
+                vec.x = -1;
+            }
         }
 
     }
@@ -182,7 +194,7 @@ public class EnemyController : Momoya.Monster
     //突進攻撃
     private void RushAttack()
     {
-        playerPos = enemyAttackZone.PlayerPos;
+        playerPos = player.transform.position;
 
         buildUpPowerCount++;
         //力をためる（後ろに下がる）
@@ -193,8 +205,7 @@ public class EnemyController : Momoya.Monster
                 vec.x = 5;
                 transform.localScale = new Vector3(-(scale * (vec.x / Math.Abs(vec.x))), transform.localScale.y, transform.localScale.z);
             }
-
-            if (transform.position.x < playerPos.x)
+            else
             {
                 vec.x = -5;
                 transform.localScale = new Vector3(-(scale * (vec.x / Math.Abs(vec.x))), transform.localScale.y, transform.localScale.z);
@@ -231,6 +242,15 @@ public class EnemyController : Momoya.Monster
             {
                 vec.x = -1;
             }
+        }
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if(collision.transform.tag == "Player")
+        {
+            damageFlag = true;
+            playerPos = collision.transform.position;
         }
     }
 

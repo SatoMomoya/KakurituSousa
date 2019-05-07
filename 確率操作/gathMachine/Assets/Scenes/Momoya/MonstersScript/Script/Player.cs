@@ -69,6 +69,10 @@ namespace Momoya
         private float widthLineUpY;      //横向きの上の線
         private float widthLineDownY;    //横向きの下の線
 
+        private int knockBackCount;
+        private int knockBackTime;
+        private bool knockBackFlag;
+        private Vector3 knockBackPos;
        // Texture2D screenTexture;
        // public Camera camera;
 
@@ -127,6 +131,9 @@ namespace Momoya
             nowJump = false;
             widthLineUpY = 0.5f;
             widthLineDownY = 0.8f;
+            knockBackCount = 0;
+            knockBackTime = 5;
+            knockBackFlag = false;
         }
 
         //Move関数
@@ -165,109 +172,116 @@ namespace Momoya
                 PlayerRarity();
                 //プレイヤーのステース
                 PlayerStatus();
-                //十字キーの入力をセット
-                vec.x = Input.GetAxis("Horizontal");
-                vec.y = Input.GetAxis("Vertical");
-                
-                //プレイヤーの向きの転換
-                if(vec.x <= -0.1f)
+                if (!knockBackFlag)
                 {
-                    this.transform.localScale = new Vector3( -Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-                }
-                else
-                {
-                    this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-                }
+                    //十字キーの入力をセット
+                    vec.x = Input.GetAxis("Horizontal");
+                    vec.y = Input.GetAxis("Vertical");
 
-
-                //ジャンプ中に横壁に当たった時
-                if (nowJump)
-                {
-                    //速度を0に
-                    vec.x = 0;
-                    //右の線が当たっていて
-                    if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
-                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x + 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
+                    //プレイヤーの向きの転換
+                    if (vec.x <= -0.1f)
                     {
-                        //左キーを押されたら移動
-                        if (Input.GetKey(KeyCode.LeftArrow))
-                        {
-                            vec.x = Input.GetAxis("Horizontal");
-                            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-                        }
-                    }
-                    
-                    
-                    //左の線が当たっていて
-                    if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
-                        Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x - 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
-                    {
-                        
-                        //右キーを押されたら移動
-                        if (Input.GetKey(KeyCode.RightArrow))
-                        {
-                            vec.x = Input.GetAxis("Horizontal");
-                            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-
-                           
-                        }
-                    }
-
-                }
-               
-                //ベクトルxが0.0じゃない場合動いている
-                if (Mathf.Abs(vec.x) != 0.0f)
-                {
-                    flag.On((uint)StateFlag.Move);
-                    animator.SetBool("IsWalk", true);
-                }
-
-                //ベクトルxが0.0なら止まっている
-                if (Mathf.Abs(vec.x) == 0.0f)
-                {
-                    flag.Off((uint)StateFlag.Move);
-                    animator.SetBool("IsWalk", false);
-                }
-
-                StealRarity();
-
-                GiveRarity();
-
-
-                if (!flag.Is((uint)StateFlag.Jump))
-                {
-                    
-                    animator.SetBool("IsJump", true);
-                    //重力を消す
-                   // GetComponent<Rigidbody>().useGravity = false;
-
-                    //落ち始めたら重力を変える
-                    if (!jumpFallFalg)
-                    {
-                        GetComponent<Rigidbody>().AddForce(gravity, ForceMode.Acceleration);
+                        this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
                     }
                     else
                     {
-                        GetComponent<Rigidbody>().AddForce(gravity2, ForceMode.Acceleration);
+                        this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
                     }
 
-                    float posY = transform.position.y - lastPos.y;
-                    //落ち始めているかどうか
-                    if (posY > 0)
+
+                    //ジャンプ中に横壁に当たった時
+                    if (nowJump)
+                    {
+                        //速度を0に
+                        vec.x = 0;
+                        //右の線が当たっていて
+                        if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                            Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x + 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
+                        {
+                            //左キーを押されたら移動
+                            if (Input.GetKey(KeyCode.LeftArrow))
+                            {
+                                vec.x = Input.GetAxis("Horizontal");
+                                this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+                            }
+                        }
+
+
+                        //左の線が当たっていて
+                        if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), layerMask) ||
+                            Physics.Linecast(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x - 0.5f, transform.position.y - widthLineDownY, transform.position.z), layerMask))
+                        {
+
+                            //右キーを押されたら移動
+                            if (Input.GetKey(KeyCode.RightArrow))
+                            {
+                                vec.x = Input.GetAxis("Horizontal");
+                                this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
+
+                            }
+                        }
+
+                    }
+
+                    //ベクトルxが0.0じゃない場合動いている
+                    if (Mathf.Abs(vec.x) != 0.0f)
+                    {
+                        flag.On((uint)StateFlag.Move);
+                        animator.SetBool("IsWalk", true);
+                    }
+
+                    //ベクトルxが0.0なら止まっている
+                    if (Mathf.Abs(vec.x) == 0.0f)
+                    {
+                        flag.Off((uint)StateFlag.Move);
+                        animator.SetBool("IsWalk", false);
+                    }
+
+                    StealRarity();
+
+                    GiveRarity();
+
+
+                    if (!flag.Is((uint)StateFlag.Jump))
+                    {
+
+                        animator.SetBool("IsJump", true);
+                        //重力を消す
+                        // GetComponent<Rigidbody>().useGravity = false;
+
+                        //落ち始めたら重力を変える
+                        if (!jumpFallFalg)
+                        {
+                            GetComponent<Rigidbody>().AddForce(gravity, ForceMode.Acceleration);
+                        }
+                        else
+                        {
+                            GetComponent<Rigidbody>().AddForce(gravity2, ForceMode.Acceleration);
+                        }
+
+                        float posY = transform.position.y - lastPos.y;
+                        //落ち始めているかどうか
+                        if (posY > 0)
+                        {
+                            animator.SetBool("IsJump", false);
+                            animator.SetBool("IsJumpDown", true);
+                            jumpFallFalg = true;
+                        }
+                    }
+                    else
                     {
                         animator.SetBool("IsJump", false);
-                        animator.SetBool("IsJumpDown", true);
-                        jumpFallFalg = true;
+                        animator.SetBool("IsJumpDown", false);
                     }
+
+                    Jump(); //ジャンプ
+                    Debug.Log(transform.position);
                 }
                 else
                 {
-                    animator.SetBool("IsJump", false);
-                    animator.SetBool("IsJumpDown", false);
+                    KnockBack(knockBackPos);
                 }
-
-                Jump(); //ジャンプ
-
                 //下の赤い線
                 Debug.DrawLine(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - 2, transform.position.z), Color.red);
                 Debug.DrawLine(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - 2, transform.position.z), Color.red);
@@ -414,8 +428,44 @@ namespace Momoya
 
             }
             
-                
-            
+        }
+
+        private void KnockBack(Vector3 pos)
+        {
+            if(knockBackFlag)
+            {
+                GetComponent<Rigidbody>().useGravity = false;
+                knockBackCount++;
+
+                if(transform.position.x > pos.x)
+                {
+                    vec.x = 1;
+                    this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+                }
+                else
+                {
+                    vec.x = -1;
+                    this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
+                }
+            }
+
+            if(knockBackCount > knockBackTime)
+            {
+                GetComponent<Rigidbody>().useGravity = true;
+                vec.x = 0;
+                knockBackCount = 0;
+                knockBackFlag = false;
+            }
+        }
+
+        public void OnCollisionEnter(Collision collision)
+        {
+            if(collision.transform.tag == "Monster")
+            {
+                knockBackFlag = true;
+                knockBackPos = collision.transform.position;
+            }
         }
 
         public  void OnCollisionStay(Collision collision)
