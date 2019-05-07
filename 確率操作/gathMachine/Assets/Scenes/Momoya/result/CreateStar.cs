@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CreateStar : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class CreateStar : MonoBehaviour
     public Momoya.SavePlayer load;
     public GameObject star001;
     public GameObject star002;
+
+    public Text text;
+
     [SerializeField]
     float width;
     bool geneFlag;
@@ -28,8 +32,8 @@ public class CreateStar : MonoBehaviour
     void Update()
     {
         //ロードされたら星の生成を始める
-        if(load.LoadFlag())
-        {
+        //if(load.LoadFlag())
+        //{
             time += Time.deltaTime;
             if (geneFlag)
             {
@@ -57,9 +61,9 @@ public class CreateStar : MonoBehaviour
                 }
                 geneFlag = true;
             }
+            text.text = player.Rarity.ToString();
+       // }
 
-        }
-
-
+        
     }
 }

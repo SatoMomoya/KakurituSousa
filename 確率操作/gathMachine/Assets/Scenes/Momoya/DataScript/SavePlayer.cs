@@ -42,11 +42,18 @@ namespace Momoya
         private List<string> _csvData;
         bool saveFlag;
         bool loadFlag;
+        private string pathtxt = "";
         // Start is called before the first frame update
         void Start()
         {
+
+            string txt = Application.dataPath;
+            string txt2 = Application.persistentDataPath;
+            pathtxt = "dataPath:" + txt + "\npersistentDataPath:" + txt2;
+            Debug.Log(pathtxt);
+
             fileName = "PlayerData.csv";
-            filePath = "exe\\Data\\" + fileName;
+            filePath = Application.persistentDataPath +"\\Data\\" + fileName;
             _csvData = new List<string>();
 
             saveFlag = false;
@@ -57,14 +64,14 @@ namespace Momoya
         // Update is called once per frame
         void Update()
         {
-            if(saveFlag)
-            {
-                return;
-            }
+            //if(saveFlag)
+            //{
+            //    return;
+            //}
             if (player.GoalFlag())
             {
                 Save();
-                saveFlag = true;
+           //     saveFlag = true;
             }
 
         }
@@ -179,6 +186,10 @@ namespace Momoya
         public bool LoadFlag()
         {
             return loadFlag;
+        }
+        void OnGUI()
+        {
+            GUI.TextArea(new Rect(5, 5, Screen.width, 50), pathtxt);
         }
     }
 }
