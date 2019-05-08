@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scenes\Okumura\PlayerCameraController.cs" />
     <Compile Include="Assets\Scenes\Okumura\TileMap.cs" />
     <Compile Include="Assets\Scenes\Okumura\TileMapEditor.cs" />
+    <Compile Include="Assets\Scenes\Ono\GaugeController.cs" />
     <Compile Include="Assets\Scenes\Ono\Scripts\Select\ArrowControl.cs" />
     <Compile Include="Assets\Scenes\Ono\Scripts\Select\GameDirector.cs" />
     <Compile Include="Assets\Scenes\Ono\Scripts\Select\SelectIndex.cs" />

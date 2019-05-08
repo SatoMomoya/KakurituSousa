@@ -13,7 +13,7 @@ public class CreateStar : MonoBehaviour
     public GameObject star001;
     public GameObject star002;
 
-    public Text text;
+   // public Text text;
 
     [SerializeField]
     float width;
@@ -61,7 +61,7 @@ public class CreateStar : MonoBehaviour
                 }
                 geneFlag = true;
             }
-            text.text = player.Rarity.ToString();
+       //   text.text = player.Rarity.ToString();
        // }
 
         

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : Momoya.Monster
+public class EnemyController : Momoya.Enemy
 {
     private Vector3 playerPos;  //プレイヤーの座標
     public LayerMask layerMask; //レイヤーマスク
-    private bool damageFlag;    //ダメージを受けたかどうかのフラグ
+    private bool hitFlag;    //ダメージを受けたかどうかのフラグ
     private bool visionFlag;    //視界に入ったかどうかのフラグ
     private bool attackFlag;    //攻撃フラグ
     //private EnemyVision enemyVision;
@@ -30,7 +30,9 @@ public class EnemyController : Momoya.Monster
     private bool lastGroundFlag;
 
     private GameObject player;
-   
+
+    private bool damageFlag;
+
     //float count;
     //初期化
     public override void Initialize()
@@ -41,7 +43,7 @@ public class EnemyController : Momoya.Monster
         swordController = FindObjectOfType<SwordController>();
         flag.Off((uint)StateFlag.Chase);
         vec.x = 1;
-        damageFlag = false;
+        hitFlag = false;
         visionFlag = false;
         attackFlag = false;
         knockBackCount = 0;
@@ -50,13 +52,13 @@ public class EnemyController : Momoya.Monster
         lastGroundFlag = false;
         //count = 0;
         knockBackTime = 15;
-      
+        damageFlag = false;
     }
 
     //移動
     public override void Move()
     {
-       // count+=0.1f;
+        // count+=0.1f;
         //vec.y = Mathf.Sin(count);
         //進む向きで画像を反転する
         transform.localScale = new Vector3(scale * (vec.x / Math.Abs(vec.x)), transform.localScale.y, transform.localScale.z);
@@ -71,7 +73,7 @@ public class EnemyController : Momoya.Monster
             flag.Off((uint)StateFlag.Chase);
         }
 
-        if (!damageFlag)
+        if (!hitFlag)
         {
             if (!attackFlag)
             {
@@ -86,23 +88,32 @@ public class EnemyController : Momoya.Monster
                     Loiter();
                 }
             }
-           
-
         }
         else
         {
             KnockBack();
 
         }
-
-        if(!damageFlag)
+        //当たってなくて攻撃フラグが立っていたら攻撃する
+        if(!hitFlag)
         {
             if (attackFlag)
             {
                 RushAttack();
             }
         }
-        
+
+        //攻撃を受けたらHPを減らす
+        if(damageFlag)
+        {
+            status.hp = status.hp - 5;
+            damageFlag = false;
+        }
+        //HPが0以下になったら消える
+        if (status.hp <= 0)
+        {
+            Finish();
+        }
 
         Debug.DrawLine(new Vector3(transform.position.x + floorDistanceX, transform.position.y, 0), new Vector3(transform.position.x + floorDistanceX + 0.4f, transform.position.y - 1, 0), Color.red);
         Debug.DrawLine(new Vector3(transform.position.x - floorDistanceX, transform.position.y, 0), new Vector3(transform.position.x - floorDistanceX - 0.4f, transform.position.y - 1, 0), Color.red);
@@ -174,7 +185,7 @@ public class EnemyController : Momoya.Monster
         {
             
             attackFlag = false;
-            damageFlag = false;
+            hitFlag = false;
             knockBackCount = 0;
             rushAttackCount = 0;
             buildUpPowerCount = 0;
@@ -249,8 +260,18 @@ public class EnemyController : Momoya.Monster
     {
         if(collision.transform.tag == "Player")
         {
-            damageFlag = true;
+            hitFlag = true;
             playerPos = collision.transform.position;
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "SwordCollision")
+        {
+            hitFlag = true;
+            playerPos = other.transform.position;
+            damageFlag = true;
         }
     }
 
@@ -262,8 +283,8 @@ public class EnemyController : Momoya.Monster
             visionFlag = true;
             playerPos = other.transform.position;
             attackFlag = true;
-            Debug.Log("見えてる");
         }
+        
     }
 
     public void OnTriggerExit(Collider other)
@@ -272,14 +293,13 @@ public class EnemyController : Momoya.Monster
         {
             //視界から出たら
             visionFlag = false;
-            Debug.Log("見えてない");
         }
     }
 
-    public bool DamageFlag
+    public bool HitFlag
     {
-        get { return damageFlag; }
-        set { damageFlag = value; }
+        get { return hitFlag; }
+        set { hitFlag = value; }
     }
     public bool VisionFlag
     {

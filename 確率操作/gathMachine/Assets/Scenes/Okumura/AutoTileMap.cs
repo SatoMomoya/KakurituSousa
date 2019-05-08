@@ -147,7 +147,7 @@ public class AutoTileMap : MonoBehaviour
 
             // 球の作成
             UnityEngine.GameObject sphere = UnityEngine.GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
+            sphere.GetComponent<Collider>().isTrigger = true;
             // 敵の位置の初期化
             Vector3 tilePositionInLocalSpace = new Vector3((row * m_tileWidth) + (m_tileWidth / 2), ((column + 1) * m_tileHeight) + (m_tileHeight / 2), 0);
             enemy.transform.position = transform.position + tilePositionInLocalSpace;

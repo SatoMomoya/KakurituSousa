@@ -22,7 +22,7 @@ public class SwordController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        bool damageFlag = enemyController.DamageFlag;
+        bool damageFlag = enemyController.HitFlag;
         bool attackFlag = swordPivotController.AttackFlag;
         switch (other.transform.tag)
         {
@@ -30,7 +30,7 @@ public class SwordController : MonoBehaviour
             case "Monster":
                 if(attackFlag)
                 {
-                    enemyController.DamageFlag = true;
+                    enemyController.HitFlag = true;
                 }
                 break;
         }

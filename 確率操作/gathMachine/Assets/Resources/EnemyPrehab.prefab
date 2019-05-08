@@ -146,10 +146,14 @@ MonoBehaviour:
   setHp: 10
   setAttack: 10
   setSpeed: 10
+  dropItem: {fileID: 2920759180946327478, guid: 8ddc5d2c71d5cb3479028288e54b9ed0,
+    type: 3}
+  dropNum: 0
+  dropProbability: 0
+  dropMode: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 512
-  knockBackTime: 30
   rushAttackTime: 60
   buildUpPowerTime: 30
   scale: 1

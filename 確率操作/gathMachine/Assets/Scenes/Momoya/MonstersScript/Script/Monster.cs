@@ -94,6 +94,13 @@ namespace Momoya
             set { status.hp = value; }
         }
 
+        //初期HPのプロパティ
+        public int StartHP
+        {
+            get { return setHp; }
+
+        }
+
         //Attackのプロパティ
         public int Attack
         {

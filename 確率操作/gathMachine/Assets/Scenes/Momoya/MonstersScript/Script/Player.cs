@@ -69,12 +69,19 @@ namespace Momoya
         private float widthLineUpY;      //横向きの上の線
         private float widthLineDownY;    //横向きの下の線
 
-        private int knockBackCount;
-        private int knockBackTime;
-        private bool knockBackFlag;
-        private Vector3 knockBackPos;
-       // Texture2D screenTexture;
-       // public Camera camera;
+        private int knockBackCount;     //ノックバックカウント
+        private int knockBackTime;      //ノックバック時間
+        private bool knockBackFlag;     //ノックバックするフラグ
+        private Vector3 knockBackPos;   //ノックバックするときの敵の座標
+        private GameObject swordCol;        //剣の当たり判定のオブジェクト 
+        private const int SwordActionTime = 16;     //剣のモーション時間
+        private int swordActionCount;               //剣のモーションカウント
+        private bool swordActionFlag;               //剣のモーションフラグ
+        private bool playerRightLeftFlag;       //trueの時は右向いている/falseの時は左向いている
+
+        private int maxHP;
+        // Texture2D screenTexture;
+        // public Camera camera;
 
 
         //public void Awake()
@@ -105,7 +112,9 @@ namespace Momoya
         {
            
             this.attackStateFlag = GetComponent<Flag>();
-            
+
+            swordCol = transform.Find("SwordCollision").gameObject;
+            swordCol.SetActive(false);
             attackStateFlag.Off((uint)AttackState.CanAttack);       
             attackStateFlag.Off((uint)AttackState.CanNotAttack);    //アタックフラグをfalseに
 
@@ -134,6 +143,10 @@ namespace Momoya
             knockBackCount = 0;
             knockBackTime = 5;
             knockBackFlag = false;
+            swordActionCount = 0;
+            swordActionFlag = false;
+
+            playerRightLeftFlag = true;
         }
 
         //Move関数
@@ -178,14 +191,25 @@ namespace Momoya
                     vec.x = Input.GetAxis("Horizontal");
                     vec.y = Input.GetAxis("Vertical");
 
-                    //プレイヤーの向きの転換
-                    if (vec.x <= -0.1f)
+                    //右押されたら右向き
+                    if(Input.GetKey(KeyCode.RightArrow))
                     {
-                        this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+                        playerRightLeftFlag = true;
+                    }
+                    //左押されたら左向き
+                    if(Input.GetKey(KeyCode.LeftArrow))
+                    {
+                        playerRightLeftFlag = false;
+                    }
+
+                    //プレイヤーの向きの転換
+                    if (playerRightLeftFlag)
+                    {
+                        this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
                     }
                     else
                     {
-                        this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+                        this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
                     }
 
 
@@ -276,7 +300,16 @@ namespace Momoya
                     }
 
                     Jump(); //ジャンプ
-                    Debug.Log(transform.position);
+                    
+                    //zキーをしたら攻撃
+                    if(Input.GetKeyDown(KeyCode.Z))
+                    {
+                        swordActionFlag = true;
+                    }
+                    if(swordActionFlag)
+                    {
+                        SwordAttack();
+                    }
                 }
                 else
                 {
@@ -374,18 +407,24 @@ namespace Momoya
         public void PlayerStatus()
         {
             ObjectStatus.Status statustmp;
-            statustmp.hp = 0;
+            statustmp.hp = status.hp;
             statustmp.attack = 0;
             statustmp.speed = 0;
+            int maxHptmp = 0;
             //装備しているステータスの合計をステータスにする
-            for(int i = 0; i < (int)HaveItem.More; i++)
+            for (int i = 0; i < (int)HaveItem.More; i++)
             {
-                statustmp.hp +=  haveItem[i].HP;
+                maxHptmp += haveItem[i].HP;
                 statustmp.attack += haveItem[i].Attack;
                 statustmp.speed += haveItem[i].Speed;
             }
-
+            maxHP = maxHptmp;
             status = statustmp;
+
+            if (status.hp > maxHP)
+            {
+                status.hp = maxHP;
+            }
             //確認用
             //Debug.Log("HP" + status.hp);
             //Debug.Log("Attack" + status.attack);
@@ -397,6 +436,27 @@ namespace Momoya
         {
            // Destroy(haveItem[(int)itemgroup].gameObject);
             haveItem[(int)itemgroup] = item;
+        }
+
+        //剣で攻撃
+        private void SwordAttack()
+        {
+            swordActionCount++;
+            animator.SetBool("IsAttack", true);
+            if(swordActionCount > 5)
+            {
+                swordCol.SetActive(true);
+            }
+           
+
+            Debug.Log(swordActionCount);
+            if(swordActionCount >= SwordActionTime)
+            {
+                animator.SetBool("IsAttack", false);
+                swordCol.SetActive(false);
+                swordActionCount = 0;
+                swordActionFlag = false;
+            }
         }
 
 
@@ -430,6 +490,7 @@ namespace Momoya
             
         }
 
+        //ノックバック
         private void KnockBack(Vector3 pos)
         {
             if(knockBackFlag)
@@ -541,9 +602,12 @@ namespace Momoya
 
         }
 
-        
+        public int MaxHP()
+        {
+            return maxHP;
+        }
 
- 
+
     }
 
 }

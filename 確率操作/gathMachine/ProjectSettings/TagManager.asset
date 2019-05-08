@@ -10,6 +10,7 @@ TagManager:
   - Monster
   - Wall
   - GameDirector
+  - SwordCollision
   layers:
   - Default
   - TransparentFX
