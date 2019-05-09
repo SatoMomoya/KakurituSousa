@@ -50,15 +50,16 @@ public class EnemyController : Momoya.Enemy
         rushAttackCount = 0;
         buildUpPowerCount = 0;
         lastGroundFlag = false;
-        //count = 0;
+        
         knockBackTime = 15;
         damageFlag = false;
+        //count = 0;
     }
 
     //移動
     public override void Move()
     {
-        // count+=0.1f;
+        //count+=0.1f;
         //vec.y = Mathf.Sin(count);
         //進む向きで画像を反転する
         transform.localScale = new Vector3(scale * (vec.x / Math.Abs(vec.x)), transform.localScale.y, transform.localScale.z);

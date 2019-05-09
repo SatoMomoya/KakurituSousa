@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class EnemyVision : MonoBehaviour
 {
-    private EnemyController enemyController;
+   
     private Vector3 playerPos;
     private bool visionFlag;
     // Start is called before the first frame update
     void Start()
     {
-        enemyController = FindObjectOfType<EnemyController>();
+        
         visionFlag = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
     public void OnTriggerStay(Collider other)
@@ -27,7 +27,7 @@ public class EnemyVision : MonoBehaviour
             //視界に入っている間
             visionFlag = true;
             Debug.Log("見えた");
-            enemyController.VisionFlag = true;
+            
             playerPos = other.transform.position;
         }
     }
@@ -38,9 +38,7 @@ public class EnemyVision : MonoBehaviour
         {
             //視界から出たら
             visionFlag = false;
-            enemyController.VisionFlag = false;
-                
-              
+             
         }
     }
 
