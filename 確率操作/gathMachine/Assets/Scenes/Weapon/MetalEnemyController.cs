@@ -16,7 +16,7 @@ public class MetalEnemyController : Momoya.Enemy
     private bool lookFlag;          //見えたフラグ
     private int escapeCount;        //逃げるカウント
     private int escapeTime;         //逃げ切れる時間
-
+    public LayerMask playerLayer;
     private Momoya.Player player;
     private GameObject playerObj;
 
@@ -51,7 +51,7 @@ public class MetalEnemyController : Momoya.Enemy
         {
             this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
         }
-        
+
         visionFlag = enemyVision.VisionFlag;
         if (visionFlag)
         {
@@ -75,6 +75,7 @@ public class MetalEnemyController : Momoya.Enemy
         if (escapeCount > escapeTime)
         {
             Destroy(gameObject);
+            
         }
 
         //攻撃を受けたらHPを減らす
@@ -97,7 +98,7 @@ public class MetalEnemyController : Momoya.Enemy
     //逃げる
     private void Escape(Vector3 playerPos)
     {
-        if(transform.position.x > playerPos.x)
+        if (transform.position.x > playerPos.x)
         {
             vec.x = 4;
         }
@@ -106,6 +107,7 @@ public class MetalEnemyController : Momoya.Enemy
             vec.x = -4;
         }
     }
+
 
     //ノックバック
     private void KnockBack()
