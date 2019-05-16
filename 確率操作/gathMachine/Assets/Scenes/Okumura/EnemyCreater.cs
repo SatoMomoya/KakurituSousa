@@ -20,9 +20,9 @@ using UnityEngine;
 //----------------------------------------------------------------------
 public class EnemyCreater : MonoBehaviour
 {
-    public UnityEngine.GameObject m_enemyObject; // 敵のオブジェクト
-    public int m_enemyNum; // 敵の数
-    public Material m_enemyMaterial; // 敵のマテリアル
+    public UnityEngine.GameObject []m_enemyObject; // 敵のオブジェクト
+    public int []m_enemyNum; // 敵の数
+    public Material []m_enemyMaterial; // 敵のマテリアル
     public int m_rows;
     public int m_columns;
     float m_tileWidth = 1.0f;
@@ -35,28 +35,32 @@ public class EnemyCreater : MonoBehaviour
     public GameObject hpCanvas;//HPUIのキャンバス
     public GameObject hpGaugePrehab;//HPゲージプレハブ
     public string m_enemyName; // 敵の名前
+    
 
     // 初期化処理
     private void Start()
     {
-        Debug.Log("へいひえひえひえひいいｈヴぉいｓでょｇふぃうおういお");
+        int length = m_enemyNum.Length;
         // 敵の数分回す
-        for (int i = 0; i < m_enemyNum; i++)
+        for (int j = 0; j < length; j++)
         {
-            // 乱数の初期化
-            int row = UnityEngine.Random.Range(1, m_rows);
-            int column = UnityEngine.Random.Range(1, m_columns);
-            // アイテムの描画
-            Enemy(column, row);
-            Debug.Log("へいひえひえひえひいいｈヴぉいｓでょｇふぃうおういお");
+            for (int i = 0; i < m_enemyNum[j]; i++)
+            {
+                // 乱数の初期化
+                int row = UnityEngine.Random.Range(1, m_rows);
+                int column = UnityEngine.Random.Range(1, m_columns);
+                // アイテムの描画
+                Enemy(column, row, j);
+                Debug.Log("へいひえひえひえひいいｈヴぉいｓでょｇふぃうおういお");
+            }
         }
         Debug.Log("aaa");
     }
+
     
     // 敵の作成処理
-    void Enemy(int row, int column)
+    void Enemy(int row, int column, int arrayNum)
     {
-        Debug.Log("淘汰よ");
         // その位置のブロックの中身を入れる
         UnityEngine.GameObject cube = UnityEngine.GameObject.Find(string.Format("AutoTile_{0}_{1}", row, column));
 
@@ -64,7 +68,7 @@ public class EnemyCreater : MonoBehaviour
         if (cube != null)
         {
             // その位置の中にアイテムを入れる
-            UnityEngine.GameObject enemy = UnityEngine.GameObject.Instantiate(m_enemyObject);
+            UnityEngine.GameObject enemy = UnityEngine.GameObject.Instantiate(m_enemyObject[arrayNum]);
 
             // 球の作成
             UnityEngine.GameObject sphere = UnityEngine.GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -89,13 +93,13 @@ public class EnemyCreater : MonoBehaviour
             sphere.transform.parent = enemy.transform;
 
             // 敵の名前の初期化
-            enemy.name = string.Format(m_enemyName+"_{0}_{1}", row + 1, column);
+            enemy.name = string.Format(m_enemyName+arrayNum.ToString()+"_{0}_{1}", row + 1, column);
 
             // 球のなめの初期化
-            sphere.name = string.Format(m_enemyName+"_Sphere_{0}_{1}", row + 1, column);
+            sphere.name = string.Format(m_enemyName+arrayNum.ToString()+"_Sphere_{0}_{1}", row + 1, column);
 
             // マテリアルの初期化
-            sphere.GetComponent<Renderer>().material = m_enemyMaterial;
+            sphere.GetComponent<Renderer>().material = m_enemyMaterial[arrayNum];
 
             //HPゲージの生成
             GameObject hpObj = Instantiate(hpGaugePrehab) as GameObject;
@@ -144,7 +148,7 @@ public class EnemyCreater : MonoBehaviour
             int r = UnityEngine.Random.Range(1, m_rows);
             int c = UnityEngine.Random.Range(1, m_columns);
             // 敵の描画
-            Enemy(c, r);
+            Enemy(c, r, arrayNum);
         }
 
     }
