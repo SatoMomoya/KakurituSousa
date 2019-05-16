@@ -41,7 +41,10 @@ public class Fade2 : MonoBehaviour
             color.b -= Time.deltaTime;
         }
 
-   
+        if(time > finaltime)
+        {
+            SceneManager.LoadScene("teramotoTeast");
+        }
 
 
         transform.GetComponent<SpriteRenderer>().color = color;
