@@ -904,3 +904,5 @@ C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Assembly-C
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Assembly-CSharp.dll
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Assembly-CSharp.pdb
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Assembly-CSharp.dll
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Assembly-CSharp.pdb

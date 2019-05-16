@@ -39,11 +39,21 @@ public class AutoTileMap : MonoBehaviour
     public int[] m_stagePercent; // ブロックの出る確率
     int m_itemNum; // アイテムの番号
 
-    public Momoya.Player m_player;
+    public Momoya.Player m_player;//プレイヤー
+    private GaugeController gauge;//HPゲージ
+    private GameObject hpDirector;//HPゲージディレクター
+    private GaugeDirector gaugeDirector;
+    private Momoya.Monster monster;//敵
 
+    public GameObject hpCanvas;//HPUIのキャンバス
+    public GameObject hpGaugePrehab;//HPゲージプレハブ
     // 初期化処理
     private void Start()
     {
+        Debug.Log("bbbbbbbbbbbbbbbbbb");
+        hpDirector = GameObject.Find("HPGaugeDirector");
+        gaugeDirector = hpDirector.GetComponent<GaugeDirector>();
+
         // アイテムの番号の初期化
         m_itemNum = 0;
 
@@ -136,65 +146,96 @@ public class AutoTileMap : MonoBehaviour
     // 敵の描画処理
     private void Enemy(int row, int column)
     {
-        // その位置のブロックの中身を入れる
-        UnityEngine.GameObject cube = UnityEngine.GameObject.Find(string.Format("AutoTile_{0}_{1}", row, column));
+        //// その位置のブロックの中身を入れる
+        //UnityEngine.GameObject cube = UnityEngine.GameObject.Find(string.Format("AutoTile_{0}_{1}", row, column));
 
-        // そのブロックが存在してたら
-        if (cube != null)
-        {
-            // その位置の中にアイテムを入れる
-            UnityEngine.GameObject enemy = UnityEngine.GameObject.Instantiate(m_enemyObject);
+        //// そのブロックが存在してたら
+        //if (cube != null)
+        //{
+        //    // その位置の中にアイテムを入れる
+        //    UnityEngine.GameObject enemy = UnityEngine.GameObject.Instantiate(m_enemyObject);
 
-            // 球の作成
-            UnityEngine.GameObject sphere = UnityEngine.GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.GetComponent<Collider>().isTrigger = true;
-            // 敵の位置の初期化
-            Vector3 tilePositionInLocalSpace = new Vector3((row * m_tileWidth) + (m_tileWidth / 2), ((column + 1) * m_tileHeight) + (m_tileHeight / 2), 0);
-            enemy.transform.position = transform.position + tilePositionInLocalSpace;
+        //    // 球の作成
+        //    UnityEngine.GameObject sphere = UnityEngine.GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        //    sphere.GetComponent<Collider>().isTrigger = true;
+        //    // 敵の位置の初期化
+        //    Vector3 tilePositionInLocalSpace = new Vector3((row * m_tileWidth) + (m_tileWidth / 2), ((column + 1) * m_tileHeight) + (m_tileHeight / 2), 0);
+        //    enemy.transform.position = transform.position + tilePositionInLocalSpace;
 
-            // 球の位置の初期化
-            sphere.transform.position = transform.position + tilePositionInLocalSpace;
+        //    // 球の位置の初期化
+        //    sphere.transform.position = transform.position + tilePositionInLocalSpace;
 
-            // サイズの初期化
-            enemy.transform.localScale = new Vector3(m_tileWidth, m_tileHeight, 1);
+        //    // サイズの初期化
+        //    enemy.transform.localScale = new Vector3(m_tileWidth, m_tileHeight, 1);
 
-            // サイズの初期化
-            sphere.transform.localScale = new Vector3(m_tileWidth, m_tileHeight, 1);
+        //    // サイズの初期化
+        //    sphere.transform.localScale = new Vector3(m_tileWidth, m_tileHeight, 1);
 
-            // 親子関係を結ぶ
-            enemy.transform.parent = transform;
+        //    // 親子関係を結ぶ
+        //    enemy.transform.parent = transform;
 
-            // 親子関係を結ぶ
-            sphere.transform.parent = enemy.transform;
+        //    // 親子関係を結ぶ
+        //    sphere.transform.parent = enemy.transform;
 
-            // 敵の名前の初期化
-            enemy.name = string.Format("Enemy_{0}_{1}", row + 1, column);
+        //    // 敵の名前の初期化
+        //    enemy.name = string.Format("Enemy_{0}_{1}", row + 1, column);
 
-            // 球のなめの初期化
-            sphere.name = string.Format("Enemy_Sphere_{0}_{1}", row + 1, column);
+        //    // 球のなめの初期化
+        //    sphere.name = string.Format("Enemy_Sphere_{0}_{1}", row + 1, column);
 
-            // マテリアルの初期化
-            sphere.GetComponent<Renderer>().material = m_enemyMaterial;
+        //    // マテリアルの初期化
+        //    sphere.GetComponent<Renderer>().material = m_enemyMaterial;
 
            
+        //    // レイヤーの追加
+        //    sphere.layer = 11;
 
+        //    //HPゲージの生成
+        //    GameObject hpObj = Instantiate(hpGaugePrehab) as GameObject;
+        //    //HPUIキャンバスの子に設定
+        //    hpObj.transform.SetParent(hpCanvas.transform, false);
+        //    //ゲージのスクリプトを取得
+        //    gauge = hpObj.GetComponent<GaugeController>();
 
-            // タグの追加
-            // enemy.tag = "Monster";
+        //    //リストに追加
+        //    if (gauge)
+        //    {
+        //        Debug.Log("sasadfas");
+        //        gaugeDirector.addHPGauge(gauge);
+        //    }
+        //    else
+        //    {
+        //        //Debug.Log("入ってないんですけど～");
+        //    }
+        //    //Debug.Log("bbbbbb");
+        //    //敵のレイヤーでモンスターにスクリプトを入れる
+        //    if (enemy.layer == LayerMask.NameToLayer("Enemy1"))
+        //    {
+        //        monster = enemy.transform.GetComponent<EnemyController>();
+        //    }
+        //    if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy2"))
+        //    {
+        //        monster = enemy.transform.GetComponent<LoiterEnemyController>();
 
-            // レイヤーの追加
-            sphere.layer = 11;
+        //    }
+        //    if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy3"))
+        //    {
+        //        monster = enemy.transform.GetComponent<MetalEnemyController>();
 
-        }
+        //    }
+        //    //リストに追加
+        //    gaugeDirector.addMonster(monster);
 
-        else
-        {
-            // 乱数の初期化
-            int r = UnityEngine.Random.Range(1, m_rows);
-            int c = UnityEngine.Random.Range(1, m_columns);
-            // 敵の描画
-            Enemy(c, r);
-        }
+        //}
+
+        //else
+        //{
+        //    // 乱数の初期化
+        //    int r = UnityEngine.Random.Range(1, m_rows);
+        //    int c = UnityEngine.Random.Range(1, m_columns);
+        //    // 敵の描画
+        //    Enemy(c, r);
+        //}
 
     }
 

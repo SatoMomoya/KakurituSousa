@@ -10,17 +10,22 @@ public class MetalEnemyController : Momoya.Enemy
     private Vector3 playerPos;          //プレイヤーの座標
     private int knockBackCount;     //ノックバックするカウント
     private int knockBackTime;     //ノックバックする時間
-    public float scale;
     public float floorDistanceX;
     private bool lastGroundFlag;        
     private bool damageFlag;
     private bool lookFlag;          //見えたフラグ
     private int escapeCount;        //逃げるカウント
     private int escapeTime;         //逃げ切れる時間
+
+    private Momoya.Player player;
+    private GameObject playerObj;
+
     //初期化
     public override void Initialize()
     {
-        enemyVision = FindObjectOfType<EnemyVision>();
+        playerObj = GameObject.Find("Player");
+        player = playerObj.GetComponent<Momoya.Player>();
+        enemyVision = GetComponentInChildren<EnemyVision>();
         vec.x = 0;
         knockBackCount = 0;
 
@@ -31,19 +36,24 @@ public class MetalEnemyController : Momoya.Enemy
         lookFlag = false;
         escapeCount = 0;
         escapeTime = 300;
+        rarity = startRarity;
     }
 
     //移動
     public override void Move()
     {
         //進む向きで画像を反転する
-        transform.localScale = new Vector3(scale * (vec.x / Math.Abs(vec.x)), transform.localScale.y, transform.localScale.z);
-
-        Debug.Log(visionFlag);
-       
+        if(vec.x > 0)
+        {
+            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
+        else
+        {
+            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
+        
         visionFlag = enemyVision.VisionFlag;
-       
-        if(visionFlag)
+        if (visionFlag)
         {
             lookFlag = true;
         }
@@ -58,8 +68,11 @@ public class MetalEnemyController : Momoya.Enemy
             Escape(enemyVision.PlayerPos);
         }
 
+        //壁に引っかかった時
+        CatchOnWall();
+
         //逃げ切ったら消える
-        if(escapeCount > escapeTime)
+        if (escapeCount > escapeTime)
         {
             Destroy(gameObject);
         }
@@ -68,7 +81,8 @@ public class MetalEnemyController : Momoya.Enemy
         if (damageFlag)
         {
             KnockBack();
-            status.hp = status.hp - 5;
+            float damege = Damege(player, this);
+            status.hp = status.hp - (int)damege;
             damageFlag = false;
         }
         //HPが0以下になったら消える
@@ -76,6 +90,8 @@ public class MetalEnemyController : Momoya.Enemy
         {
             Finish();
         }
+
+        
     }
 
     //逃げる
@@ -98,14 +114,16 @@ public class MetalEnemyController : Momoya.Enemy
         if (transform.position.x > playerPos.x)
         {
             vec.x = 5;
+            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
         }
         else
         {
             vec.x = -5;
+            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
         }
 
-        //画像の向きを合わせる
-        transform.localScale = new Vector3(-(scale * (vec.x / Math.Abs(vec.x))), transform.localScale.y, transform.localScale.z);
 
         //0.5フレームノックバックする
         if (knockBackCount > knockBackTime)
@@ -123,6 +141,7 @@ public class MetalEnemyController : Momoya.Enemy
 
     }
 
+    
     public void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag == "SwordCollision")

@@ -127,7 +127,7 @@ MonoBehaviour:
   name: "\u30AD\u30A6\u30A4"
   startRarity: 1
   setHp: 10
-  setAttack: 10
+  setAttack: 15
   setSpeed: 10
   type: 2
 --- !u!65 &130

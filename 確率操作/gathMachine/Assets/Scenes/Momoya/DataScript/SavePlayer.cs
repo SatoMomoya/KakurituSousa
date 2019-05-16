@@ -73,7 +73,6 @@ namespace Momoya
                 Save();
            //     saveFlag = true;
             }
-
         }
 
 
@@ -145,11 +144,11 @@ namespace Momoya
             player.Speed = tmp;
 
             //確認用
-            Debug.Log("Name" + player.Name);
-            Debug.Log("Rarity" + player.Rarity);
-            Debug.Log("HP" + player.HP);
-            Debug.Log("Attack" + player.Attack);
-            Debug.Log("Speed" + player.Speed);
+            //Debug.Log("Name" + player.Name);
+            //Debug.Log("Rarity" + player.Rarity);
+            //Debug.Log("HP" + player.HP);
+            //Debug.Log("Attack" + player.Attack);
+            //Debug.Log("Speed" + player.Speed);
             //武器はでき次第追加で書く
             _csvData.Clear();
         }

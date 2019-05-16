@@ -10,23 +10,18 @@ using UnityEngine.UI;
 public class GaugeController : MonoBehaviour
 {
 	// <メンバー変数>
-    public Monster m_player;
+    private Monster monster;
     private Slider m_slider;
 
     float time = 0.0f;
     float span = 0.3f;
 
-  
     private void Start()
     {
         m_slider = GetComponent<Slider>();
 
-        m_player.HP = m_player.StartHP;
-        Debug.Log("入れる" + m_player.StartHP);
-        m_slider.maxValue = m_player.HP;
-
-
-
+        //monster.HP = monster.StartHP;
+        //Debug.Log("入れる" + monster.StartHP);
     }
 
 
@@ -34,19 +29,34 @@ public class GaugeController : MonoBehaviour
 
 	private void Update ()
 	{
-        if (m_player.tag == "Player")
-        {
-            m_slider.maxValue = m_player.GetComponent<Player>().MaxHP();
-            Debug.Log("新たに入れる" + m_player.GetComponent<Player>().MaxHP());
-        }
+        Debug.Log(monster);
+        m_slider.maxValue = monster.StartHP;
+        //m_slider.maxValue = monster.GetComponent<Player>().MaxHP();
+
+        //Debug.Log("新たに入れる" + m_player.GetComponent<Player>().MaxHP());
+
         //time += Time.deltaTime;
         //if(time > span)
         //{
         //    m_player.HP = m_player.HP - 1;
         //    time = 0.0f;
-            
+
         //}
-        m_slider.value = m_player.HP;
-        Debug.Log("今のHP" + m_player.HP);
+
+
+        transform.position = new Vector3(monster.transform.position.x, monster.transform.position.y + 0.5f, monster.transform.position.z);
+        m_slider.value = monster.HP;
+
+        if(monster.HP <= 0)
+        {
+            Destroy(gameObject);
+        }
+        // Debug.Log("今のHP" + m_player.HP);
     }
+
+    public void SetMonster(Momoya.Monster mon)
+    {
+        monster = mon;
+    }
+    
 }

@@ -6,7 +6,6 @@ using UnityEngine;
 public class EnemyController : Momoya.Enemy
 {
     private Vector3 playerPos;  //プレイヤーの座標
-    public LayerMask layerMask; //レイヤーマスク
     private bool hitFlag;    //ダメージを受けたかどうかのフラグ
     private bool visionFlag;    //視界に入ったかどうかのフラグ
     private bool attackFlag;    //攻撃フラグ
@@ -23,13 +22,12 @@ public class EnemyController : Momoya.Enemy
     public int rushAttackTime;    //突進攻撃する時間
     public int buildUpPowerTime;  //突進前の溜めの時間
 
-    public float scale;
-
     public float floorDistanceX;
 
     private bool lastGroundFlag;
 
-    private GameObject player;
+    private Momoya.Player player;
+    private GameObject playerObj;
 
     private bool damageFlag;
 
@@ -38,7 +36,8 @@ public class EnemyController : Momoya.Enemy
     public override void Initialize()
     {
         //enemyVision = FindObjectOfType<EnemyVision>();
-        player = GameObject.Find("Player");
+        playerObj = GameObject.Find("Player");
+        player = playerObj.GetComponent<Momoya.Player>();
         enemyAttackZone = FindObjectOfType<EnemyAttackZone>();
         swordController = FindObjectOfType<SwordController>();
         flag.Off((uint)StateFlag.Chase);
@@ -54,6 +53,7 @@ public class EnemyController : Momoya.Enemy
         knockBackTime = 15;
         damageFlag = false;
         //count = 0;
+        rarity = startRarity;
     }
 
     //移動
@@ -61,9 +61,16 @@ public class EnemyController : Momoya.Enemy
     {
         //count+=0.1f;
         //vec.y = Mathf.Sin(count);
-        //進む向きで画像を反転する
-        transform.localScale = new Vector3(scale * (vec.x / Math.Abs(vec.x)), transform.localScale.y, transform.localScale.z);
 
+        //進む向きで画像を反転する
+        if (vec.x > 0)
+        {
+            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
+        else
+        {
+            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
         if (visionFlag)
         {
             flag.On((uint)StateFlag.Chase);
@@ -92,9 +99,11 @@ public class EnemyController : Momoya.Enemy
         }
         else
         {
+            //ノックバック
             KnockBack();
 
         }
+
         //当たってなくて攻撃フラグが立っていたら攻撃する
         if(!hitFlag)
         {
@@ -104,11 +113,17 @@ public class EnemyController : Momoya.Enemy
             }
         }
 
+        //壁に引っかかった時
+        CatchOnWall();
+
         //攻撃を受けたらHPを減らす
-        if(damageFlag)
+        if (damageFlag)
         {
-            status.hp = status.hp - 5;
+            
+            float damege = Damege(player, this);
+            status.hp = status.hp - (int)damege;
             damageFlag = false;
+            Debug.Log("HP="+status.hp);
         }
         //HPが0以下になったら消える
         if (status.hp <= 0)
@@ -172,15 +187,17 @@ public class EnemyController : Momoya.Enemy
         if (transform.position.x > playerPos.x)
         {
             vec.x = 5;
+            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
         }
         else
         {
             vec.x = -5;
+            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
         }
 
-        //画像の向きを合わせる
-        transform.localScale = new Vector3(-(scale * (vec.x / Math.Abs(vec.x))), transform.localScale.y, transform.localScale.z);
-
+       
         //0.5フレームノックバックする
         if (knockBackCount > knockBackTime)
         {
@@ -206,7 +223,7 @@ public class EnemyController : Momoya.Enemy
     //突進攻撃
     private void RushAttack()
     {
-        playerPos = player.transform.position;
+        playerPos = playerObj.transform.position;
 
         buildUpPowerCount++;
         //力をためる（後ろに下がる）
@@ -215,12 +232,12 @@ public class EnemyController : Momoya.Enemy
             if (transform.position.x > playerPos.x)
             {
                 vec.x = 5;
-                transform.localScale = new Vector3(-(scale * (vec.x / Math.Abs(vec.x))), transform.localScale.y, transform.localScale.z);
+                this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
             }
             else
             {
                 vec.x = -5;
-                transform.localScale = new Vector3(-(scale * (vec.x / Math.Abs(vec.x))), transform.localScale.y, transform.localScale.z);
+                this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
             }
 
         }

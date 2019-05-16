@@ -902,3 +902,4 @@ C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.Rend
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.Runtime.csprojResolveAssemblyReference.cache
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.Runtime.dll
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.Runtime.pdb
+C:\Users\s172126\Documents\KakurituSousa - コピー\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.Runtime.csprojResolveAssemblyReference.cache

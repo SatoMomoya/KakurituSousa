@@ -30,6 +30,7 @@ namespace Momoya
         protected Vector3 monsterSpeed; //モンスターのスピード
         protected Flag flag;      //フラグ
 
+        private int minDamege;
        
         //列挙型の定義
         protected enum StateFlag //状態のフラグ
@@ -62,7 +63,9 @@ namespace Momoya
             status.hp = setHp;
             status.attack = setAttack;
             status.speed  = setSpeed;
-            
+
+            minDamege = 1;
+
             //初期化処理(子クラス用)
             Initialize();
 
@@ -141,7 +144,16 @@ namespace Momoya
 
         //HP0のとき終了する処理をかく
 
-     
+
+        //ダメージ計算
+        public float Damege(Momoya.Monster attack,Momoya.Monster defense)
+        {
+            Debug.Log("at = "+attack.Attack);
+            float damege = attack.Attack * (((attack.Attack / defense.rarity) * minDamege) / 100.0f);
+           
+            Debug.Log("damegeLast = " + damege);
+            return damege;
+        }
 
         //何かと離れたときの関数
         protected void OnCollisionExit(Collision collision)

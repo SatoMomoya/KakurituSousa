@@ -7,7 +7,8 @@ public class PlaySceneGo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        System.GC.Collect();
+        Resources.UnloadUnusedAssets();
     }
 
     // Update is called once per frame

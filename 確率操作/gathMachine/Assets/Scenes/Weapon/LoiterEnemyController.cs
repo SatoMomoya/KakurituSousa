@@ -6,15 +6,14 @@ using UnityEngine;
 public class LoiterEnemyController : Momoya.Enemy
 {
     private Vector3 playerPos;  //プレイヤーの座標
-    public LayerMask layerMask; //レイヤーマスク
     private int knockBackCount;     //ノックバックするカウント
     private int knockBackTime;     //ノックバックする時間
-    public float scale;
     public float floorDistanceX;
 
     private bool lastGroundFlag;
 
-    private GameObject player;
+    private Momoya.Player player;
+    private GameObject playerObj;
 
     private bool damageFlag;
 
@@ -26,7 +25,8 @@ public class LoiterEnemyController : Momoya.Enemy
     public override void Initialize()
     {
 
-        player = GameObject.Find("Player");
+        playerObj = GameObject.Find("Player");
+        player = playerObj.GetComponent<Momoya.Player>();
 
         flag.Off((uint)StateFlag.Chase);
         vec.x = 1;
@@ -37,6 +37,7 @@ public class LoiterEnemyController : Momoya.Enemy
         damageFlag = false;
         wallHitCount = 0;
         wallHitTime = 30;
+        rarity = startRarity;
     }
 
     //移動
@@ -44,19 +45,14 @@ public class LoiterEnemyController : Momoya.Enemy
     {
 
         //進む向きで画像を反転する
-        transform.localScale = new Vector3(scale * (vec.x / Math.Abs(vec.x)), transform.localScale.y, transform.localScale.z);
-
-        //右の壁判定
-        //if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x + 0.6f, transform.position.y, 0), layerMask))
-        //{
-        //    wallHitCount++;
-        //}
-        //左の壁判定
-        //if (Physics.Linecast(new Vector3(transform.position.x, transform.position.y, 0), new Vector3(transform.position.x - 0.6f, transform.position.y, 0), layerMask))
-        //{
-        //    wallHitCount++;
-        //}
-
+        if (vec.x > 0)
+        {
+            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
+        else
+        {
+            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
         if (!damageFlag)
         {
             //徘徊
@@ -67,20 +63,15 @@ public class LoiterEnemyController : Momoya.Enemy
             KnockBack();
         }
 
-        
-
-        //壁に当たり続けたら移動を0にする
-        //if(wallHitCount > wallHitTime)
-        //{
-        //    wallHitCount = 0;
-        //    lastVec = vec;
-        //    vec.x = 0;
-        //}
+        //壁に引っかかった時
+        CatchOnWall();
 
         //攻撃を受けたらHPを減らす
         if (damageFlag)
         {
-            status.hp = status.hp - 5;
+            Debug.Log("aa" + player.Attack);
+            float damege = Damege(player, this);
+            status.hp = status.hp - (int)damege;
             damageFlag = false;
         }
         //HPが0以下になったら消える
@@ -129,14 +120,15 @@ public class LoiterEnemyController : Momoya.Enemy
         if (transform.position.x > playerPos.x)
         {
             vec.x = 5;
+            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+
         }
         else
         {
             vec.x = -5;
-        }
+            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
 
-        //画像の向きを合わせる
-        transform.localScale = new Vector3(-(scale * (vec.x / Math.Abs(vec.x))), transform.localScale.y, transform.localScale.z);
+        }
 
         //0.5フレームノックバックする
         if (knockBackCount > knockBackTime)

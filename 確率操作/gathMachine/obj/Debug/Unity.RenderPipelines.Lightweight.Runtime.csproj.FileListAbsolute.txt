@@ -912,3 +912,5 @@ C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.Rend
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Lightweight.Runtime.csprojResolveAssemblyReference.cache
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Lightweight.Runtime.dll
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Lightweight.Runtime.pdb
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Lightweight.Runtime.dll
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Lightweight.Runtime.pdb

@@ -900,3 +900,5 @@ C:\Users\s172091\Documents\project\確率操作\gathMachine\obj\Debug\Unity.Rend
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.ShaderLibrary.csprojResolveAssemblyReference.cache
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.ShaderLibrary.dll
 C:\Users\s172041\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.ShaderLibrary.pdb
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.ShaderLibrary.dll
+C:\Users\s172126\Documents\KakurituSousa\確率操作\gathMachine\obj\Debug\Unity.RenderPipelines.Core.ShaderLibrary.pdb
