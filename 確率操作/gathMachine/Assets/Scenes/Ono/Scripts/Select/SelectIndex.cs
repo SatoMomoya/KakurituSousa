@@ -25,7 +25,9 @@ public class SelectIndex : MonoBehaviour
     private float m_changeColor;
     private bool m_changeColorFlag;
     int num;
+    int count;
     public GameDirector rarity;
+
     // Use this for initialization
     void Start () {
         m_index = 0;
@@ -36,14 +38,14 @@ public class SelectIndex : MonoBehaviour
         m_changeColorFlag = false;
         SetImage();
         num = 0;
-      
+        count = 0;
     }
 	
 	// Update is called once per frame
 	void Update () {
         Move();
         ChangeColors();
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space)&& count >= 20)
         {
             GetRarity();
             //シーンの移行
@@ -55,6 +57,7 @@ public class SelectIndex : MonoBehaviour
 
     void Move()
     {
+        count++;
         float speed = Time.deltaTime * m_rotSpeed;   
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -65,8 +68,10 @@ public class SelectIndex : MonoBehaviour
                 m_index = 0;
                 num--;
             }
+            count = 0;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.LeftArrow))
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.LeftArrow) )
         {
             m_index--;
             num--;
@@ -75,6 +80,7 @@ public class SelectIndex : MonoBehaviour
                 m_index = m_imgList.Count;
                 num++;
             }
+            count = 0;
         }
         if (num >= 5) num = 1;
         if (num <= 0) num = 4;
@@ -89,6 +95,7 @@ public class SelectIndex : MonoBehaviour
         {
             Image tmpImage = Instantiate<Image>(m_preImage, m_center.transform) as Image;
             tmpImage.sprite = m_spriteList[i];
+            tmpImage.transform.localScale = new Vector3(2, 2, 2);
             m_imgList.Add(tmpImage);
         }
 
@@ -111,20 +118,20 @@ public class SelectIndex : MonoBehaviour
 
     void ChangeColors()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            m_changeColorFlag = true;
-            SetIndex();
-        }
-        if (m_changeColorFlag) m_changeColor -= 0.01f;
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    m_changeColorFlag = true;
+        //    SetIndex();
+        //}
+        //if (m_changeColorFlag) m_changeColor -= 0.01f;
 
-        foreach (var img in m_imgList)
-        {
-            img.color = new Color(1, m_changeColor, m_changeColor);
+        //foreach (var img in m_imgList)
+        //{
+        //    img.color = new Color(1, m_changeColor, m_changeColor);
         }
 
       //  if (m_changeColor <= 0) GameDirector.ChangeScene(GameDirector.SceneID.SCENE_GAME);
-    }
+  //  }
 
     private void SetIndex()
     {
