@@ -23,6 +23,7 @@ namespace Momoya
         public enum Mode
         {
             Play,
+            HPZERO,
             Result,
 
             More
@@ -211,14 +212,15 @@ namespace Momoya
                     return;
                 }
                 //リセット用(デバッグ)
-                if(Input.GetKeyDown(KeyCode.R))
-                {
-                    SceneManager.LoadScene("Stagetest");
-                }
+                //if(Input.GetKeyDown(KeyCode.R))
+                //{
+                //    SceneManager.LoadScene("Stagetest");
+                //}
 
+                //HPが0になったとき
                 if (status.hp <= 0)
                 {
-                    SceneManager.LoadScene("teramotoTeast");
+                    flag.On((uint)StateFlag.Goal);
                 }
 
 
@@ -447,12 +449,20 @@ namespace Momoya
         public void PlayerRarity()
         {
             int rarityCount = 0;
-            for (int i = 0; i < (int)HaveItem.More; i++)
+             if(status.hp >0)
             {
-                rarityCount += haveItem[i].Rarity;
+                for (int i = 0; i < (int)HaveItem.More; i++)
+                {
+                    rarityCount += haveItem[i].Rarity;
+                }
+
+                rarity = rarityCount / (int)HaveItem.More;
+            }
+             else
+            {
+                rarity = 1;
             }
 
-            rarity = rarityCount / (int)HaveItem.More ;
             //Debug.Log("PlayerRarity" + rarity);
         }
 

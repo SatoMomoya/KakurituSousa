@@ -716,7 +716,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 63287
+    m_Bits: 194359
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1820,6 +1820,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WeaponR1
       objectReference: {fileID: 0}
+    - target: {fileID: 65, guid: 594d204a4aec8f048b7293a598cca3bc, type: 3}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 99, guid: 594d204a4aec8f048b7293a598cca3bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 254.59619
@@ -1863,6 +1867,10 @@ PrefabInstance:
     - target: {fileID: 99, guid: 594d204a4aec8f048b7293a598cca3bc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 67, guid: 594d204a4aec8f048b7293a598cca3bc, type: 3}
+      propertyPath: m_Layer
+      value: 17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 594d204a4aec8f048b7293a598cca3bc, type: 3}
@@ -30074,7 +30082,7 @@ PrefabInstance:
     - target: {fileID: 1955051528540566207, guid: 61cce9ff485b2d34e9beefb872e8a814,
         type: 3}
       propertyPath: name
-      value: "\u306F\u3093\u3089"
+      value: "\u30AC\u30C1\u30E3\u30DE\u30F3"
       objectReference: {fileID: 0}
     - target: {fileID: 1955051528540566207, guid: 61cce9ff485b2d34e9beefb872e8a814,
         type: 3}
@@ -30129,6 +30137,12 @@ PrefabInstance:
       propertyPath: hpGaugePrehab
       value: 
       objectReference: {fileID: 238888954912696989, guid: efab7950ed7491845a88b075c3c91e1c,
+        type: 3}
+    - target: {fileID: 1955051528540566207, guid: 61cce9ff485b2d34e9beefb872e8a814,
+        type: 3}
+      propertyPath: bulletPrehab
+      value: 
+      objectReference: {fileID: 8841237328194701512, guid: 9a4a87b43a48b1a48b1f9b2243aae02a,
         type: 3}
     - target: {fileID: 1955051528540566202, guid: 61cce9ff485b2d34e9beefb872e8a814,
         type: 3}
@@ -30241,6 +30255,16 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 90b65b1d3036f7f48a2e2a77a0e7c4ba, type: 2}
+    - target: {fileID: 1955051528540566204, guid: 61cce9ff485b2d34e9beefb872e8a814,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955051528540566204, guid: 61cce9ff485b2d34e9beefb872e8a814,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1955051528540566200, guid: 61cce9ff485b2d34e9beefb872e8a814,
         type: 3}
       propertyPath: m_Center.y
