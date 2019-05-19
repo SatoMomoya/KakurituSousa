@@ -24,7 +24,7 @@ public class LoiterEnemyController : Momoya.Enemy
     //初期化
     public override void Initialize()
     {
-
+        
         playerObj = GameObject.Find("Player");
         player = playerObj.GetComponent<Momoya.Player>();
 
