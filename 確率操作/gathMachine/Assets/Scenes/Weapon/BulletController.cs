@@ -4,25 +4,31 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    private GunController gunController;
+    private GameObject playerObj;
+    private Momoya.Player player;
     private int count;
-    private int direction;
+    private bool direction;
     // Start is called before the first frame update
     void Start()
     {
-        gunController = FindObjectOfType<GunController>();
+        playerObj = GameObject.Find("Player");
+        player = playerObj.GetComponent<Momoya.Player>();
         count = 0;
-        direction = gunController.Direction;
+        direction = player.PlayerRightLeftFlag();
+        transform.position = playerObj.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-
-        pos.x += direction;
-       
-        transform.position = pos;
+        if(direction)
+        {
+            transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y, transform.position.z);
+        }
+        else
+        {
+            transform.position = new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z);
+        }
 
         count++;
         if (count > 180)
@@ -32,9 +38,14 @@ public class BulletController : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Ground" || other.gameObject.tag == "Enemy")
+        {
+            Destroy(gameObject);
+        }
+
+        if(other.gameObject.tag == "Monster")
         {
             Destroy(gameObject);
         }

@@ -80,6 +80,12 @@ namespace Momoya
         private bool swordActionFlag;               //剣のモーションフラグ
         private bool playerRightLeftFlag;       //trueの時は右向いている/falseの時は左向いている
 
+        public GameObject bulletPrehab;
+        private bool bulletCreateFlag;
+        private bool wandActionFlag;
+        private const int WandActionTime = 8;     //杖のモーション時間
+        private int wandActionCount;               //杖のモーションカウント
+
         private int maxHP;
 
         public Monster enemy1;
@@ -132,6 +138,7 @@ namespace Momoya
             attackStateFlag.Off((uint)AttackState.CanNotAttack);    //アタックフラグをfalseに
 
             animator = GetComponent<Animator>();
+            animator.SetBool("IsWepon", true);
 
             jumpFallFalg = false;
 
@@ -174,6 +181,9 @@ namespace Momoya
             swordActionCount = 0;
             swordActionFlag = false;
 
+            bulletCreateFlag = false;
+            wandActionFlag = false;
+            wandActionCount = 0;
             playerRightLeftFlag = true;
         }
 
@@ -218,14 +228,30 @@ namespace Momoya
                 PlayerRarity();
                 //プレイヤーのステース
                 PlayerStatus();
+
+                if(haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
+                {
+                    animator.SetBool("IsWepon", true);
+                }
+                else
+                {
+                    animator.SetBool("IsWepon", false);
+                }
+
                 if (!knockBackFlag)
                 {
                     //十字キーの入力をセット
                     vec.x = Input.GetAxis("Horizontal");
                     vec.y = Input.GetAxis("Vertical");
 
+                    if(Input.GetKeyDown(KeyCode.E))
+                    {
+
+                        
+                    }
+
                     //右押されたら右向き
-                    if(Input.GetKey(KeyCode.RightArrow))
+                    if (Input.GetKey(KeyCode.RightArrow))
                     {
                         playerRightLeftFlag = true;
                     }
@@ -245,8 +271,6 @@ namespace Momoya
                         this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
                     }
 
-                    Debug.Log("nowJump" + nowJump);
-
                     ////ジャンプ中に横壁に当たった時
                     if (nowJump)
                     {
@@ -259,8 +283,6 @@ namespace Momoya
                         {
                             vec.x = vec.x + (Math.Abs(vec.x));
                         }
-
-                      
                     }
 
                     //ベクトルxが0.0じゃない場合動いている
@@ -283,9 +305,7 @@ namespace Momoya
 
                     if (!flag.Is((uint)StateFlag.Jump))
                     {
-
-                        animator.SetBool("IsJump", true);
-                      
+                        
                         //落ち始めたら重力を変える
                         if (!jumpFallFalg)
                         {
@@ -322,11 +342,23 @@ namespace Momoya
                     //zキーをしたら攻撃
                     if(Input.GetKeyDown(KeyCode.Z))
                     {
-                        swordActionFlag = true;
+                        if(haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
+                        {
+                            swordActionFlag = true;
+                        }
+                        else
+                        {
+                            wandActionFlag = true;
+                        }
+                        
                     }
                     if(swordActionFlag)
                     {
                         SwordAttack();
+                    }
+                    if(wandActionFlag)
+                    {
+                        WandAttack();
                     }
                 }
                 else
@@ -480,6 +512,34 @@ namespace Momoya
             }
         }
 
+        //杖で攻撃
+        private void WandAttack()
+        {
+            wandActionCount++;
+            animator.SetBool("IsAttack", true);
+
+            if(!bulletCreateFlag)
+            {
+                if(wandActionCount > 5)
+                {
+                    GameObject bullet = Instantiate(bulletPrehab) as GameObject;
+                    
+                    bulletPrehab.transform.position = transform.position;
+                    
+                    bulletCreateFlag = true;
+                }
+            }
+
+            if(wandActionCount >= WandActionTime)
+            {
+                animator.SetBool("IsAttack", false);
+                
+                wandActionCount = 0;
+                wandActionFlag = false;
+                bulletCreateFlag = false;
+            }
+
+        }
 
         //ジャンプするための関数
         private void Jump()
@@ -506,6 +566,7 @@ namespace Momoya
             if (Input.GetKeyDown(KeyCode.Space) && flag.Is((uint)StateFlag.Jump))
             {
                 GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
+                animator.SetBool("IsJump", true);
 
             }
             
@@ -641,6 +702,10 @@ namespace Momoya
             return maxHP;
         }
 
+        public bool PlayerRightLeftFlag()
+        {
+            return playerRightLeftFlag;
+        }
 
     }
 

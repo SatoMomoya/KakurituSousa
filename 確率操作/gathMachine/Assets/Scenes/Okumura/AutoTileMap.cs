@@ -292,7 +292,7 @@ public class AutoTileMap : MonoBehaviour
             m_itemNum++;
 
             // 次のアイテムがなかったら
-            if (m_itemNum > 14)
+            if (m_itemNum > 29)
             {
                 // ０に戻す
                 m_itemNum = 0;

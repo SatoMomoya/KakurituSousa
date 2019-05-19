@@ -118,7 +118,7 @@ MonoBehaviour:
   setHp: 20
   setAttack: 10
   setSpeed: 10
-  dropItem: {fileID: 4483273272893816551, guid: 8ddc5d2c71d5cb3479028288e54b9ed0,
+  dropItem: {fileID: 7374698392196047047, guid: cf8c980c429ab234abeeb6b35af76d62,
     type: 3}
   dropNum: 0
   dropProbability: 0
