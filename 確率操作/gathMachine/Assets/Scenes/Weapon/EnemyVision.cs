@@ -20,6 +20,14 @@ public class EnemyVision : MonoBehaviour
        
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.tag == "SwordCollision")
+        {
+            return;
+        }
+    }
+
     public void OnTriggerStay(Collider other)
     {
         if(other.transform.tag == "Player")

@@ -16,7 +16,7 @@ public class GaugeController : MonoBehaviour
     float time = 0.0f;
     float span = 0.3f;
 
-    private void Start()
+    void Start()
     {
         m_slider = GetComponent<Slider>();
 
@@ -27,27 +27,24 @@ public class GaugeController : MonoBehaviour
 
 
 
-	private void Update ()
+	void Update ()
 	{
-        Debug.Log(monster);
-        m_slider.maxValue = monster.StartHP;
-        //m_slider.maxValue = monster.GetComponent<Player>().MaxHP();
+        if(monster)
+        {
+            transform.position = new Vector3(monster.transform.position.x, monster.transform.position.y + 0.8f, monster.transform.position.z);
 
-        //Debug.Log("新たに入れる" + m_player.GetComponent<Player>().MaxHP());
+            if (monster.transform.tag == "Player")
+            {
+                transform.localPosition = new Vector3(-270.0f, 275.0f, 0.0f);
+                transform.localScale = new Vector3(3, 2, 2);
+            }
 
-        //time += Time.deltaTime;
-        //if(time > span)
-        //{
-        //    m_player.HP = m_player.HP - 1;
-        //    time = 0.0f;
+            m_slider.maxValue = monster.StartHP;
 
-        //}
+            m_slider.value = monster.HP;
 
-
-        transform.position = new Vector3(monster.transform.position.x, monster.transform.position.y + 0.5f, monster.transform.position.z);
-        m_slider.value = monster.HP;
-
-        if(monster.HP <= 0)
+        }
+        else
         {
             Destroy(gameObject);
         }

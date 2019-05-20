@@ -27,11 +27,11 @@ TagManager:
   - Enemy1
   - Enemy2
   - Enemy3
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Vision
+  - SwordCollision
+  - Sword
+  - Wand
   - 
   - 
   - 

@@ -50,10 +50,10 @@ namespace Momoya
             string txt = Application.dataPath;
             string txt2 = Application.persistentDataPath;
             pathtxt = "dataPath:" + txt + "\npersistentDataPath:" + txt2;
-            Debug.Log(pathtxt);
+          
 
             fileName = "PlayerData.csv";
-            filePath = Application.persistentDataPath +"\\Data\\" + fileName;
+            filePath = Application.dataPath +"/StreamingAssets" + @"\Data\" + fileName;
             _csvData = new List<string>();
 
             saveFlag = false;
@@ -186,9 +186,9 @@ namespace Momoya
         {
             return loadFlag;
         }
-        void OnGUI()
-        {
-            GUI.TextArea(new Rect(5, 5, Screen.width, 50), pathtxt);
-        }
+        //void OnGUI()
+        //{
+        //    GUI.TextArea(new Rect(5, 5, Screen.width, 50), pathtxt);
+        //}
     }
 }
