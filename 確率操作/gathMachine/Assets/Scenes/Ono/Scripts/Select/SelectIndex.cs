@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class SelectIndex : MonoBehaviour
-{ 
+{
     // スプライトの保存
     public List<Sprite> m_spriteList;
     public GameObject m_center;
@@ -18,34 +18,35 @@ public class SelectIndex : MonoBehaviour
     // 角度
     private float m_angle;
 
-    private float m_interval;
+    public float m_interval;
     private float m_position;
 
     private int m_index;
     private float m_changeColor;
     private bool m_changeColorFlag;
     int num;
-    int count;
     public GameDirector rarity;
-
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         m_index = 0;
-        m_interval = 1;
+        m_interval = 60;
         m_angle = 0;
         m_position = 0;
         m_changeColor = 1;
         m_changeColorFlag = false;
         SetImage();
         num = 0;
-        count = 0;
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
+        m_interval++;
         Move();
-        ChangeColors();
-        if (Input.GetKey(KeyCode.Space)&& count >= 20)
+        //ChangeColors();
+        if (Input.GetKey(KeyCode.Space)&&m_interval>=60)
         {
             GetRarity();
             //シーンの移行
@@ -57,9 +58,8 @@ public class SelectIndex : MonoBehaviour
 
     void Move()
     {
-        count++;
-        float speed = Time.deltaTime * m_rotSpeed;   
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        float speed = Time.deltaTime * m_rotSpeed;
+        if (Input.GetKeyDown(KeyCode.RightArrow)&& m_interval >=60)
         {
             m_index++;
             num++;
@@ -68,10 +68,9 @@ public class SelectIndex : MonoBehaviour
                 m_index = 0;
                 num--;
             }
-            count = 0;
+            m_interval = 0;
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.LeftArrow) )
+        if (Input.GetKeyDown(KeyCode.LeftArrow)&& m_interval>=60)
         {
             m_index--;
             num--;
@@ -80,7 +79,7 @@ public class SelectIndex : MonoBehaviour
                 m_index = m_imgList.Count;
                 num++;
             }
-            count = 0;
+            m_interval = 0;
         }
         if (num >= 5) num = 1;
         if (num <= 0) num = 4;
@@ -89,7 +88,7 @@ public class SelectIndex : MonoBehaviour
 
     void SetImage()
     {
-    
+
         // Imageのインスタンス
         for (int i = 0; i < m_spriteList.Count; i++)
         {
@@ -104,34 +103,34 @@ public class SelectIndex : MonoBehaviour
         {
             float x = 0; float z = 0;
 
-            x = 1000 * Mathf.Cos((Mathf.PI * 2) / m_imgList.Count * j- Mathf.Deg2Rad * 90);
-            z = 1000 * Mathf.Sin((Mathf.PI * 2) / m_imgList.Count * j- Mathf.Deg2Rad * 90);
+            x = 1000 * Mathf.Cos((Mathf.PI * 2) / m_imgList.Count * j - Mathf.Deg2Rad * 90);
+            z = 1000 * Mathf.Sin((Mathf.PI * 2) / m_imgList.Count * j - Mathf.Deg2Rad * 90);
 
             m_angle = 360 / m_imgList.Count * j;
 
-           img.transform.localPosition = new Vector3(x , 0, z );
-           img.transform.Rotate(0, -m_angle, 0);
+            img.transform.localPosition = new Vector3(x, 0, z);
+            img.transform.Rotate(0, -m_angle, 0);
 
-           j++;
+            j++;
         }
     }
 
-    void ChangeColors()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    m_changeColorFlag = true;
-        //    SetIndex();
-        //}
-        //if (m_changeColorFlag) m_changeColor -= 0.01f;
+    //void ChangeColors()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        m_changeColorFlag = true;
+    //        SetIndex();
+    //    }
+    //    if (m_changeColorFlag) m_changeColor -= 0.01f;
 
-        //foreach (var img in m_imgList)
-        //{
-        //    img.color = new Color(1, m_changeColor, m_changeColor);
-        }
+    //    foreach (var img in m_imgList)
+    //    {
+    //        img.color = new Color(1, m_changeColor, m_changeColor);
+    //    }
 
-      //  if (m_changeColor <= 0) GameDirector.ChangeScene(GameDirector.SceneID.SCENE_GAME);
-  //  }
+    //    //  if (m_changeColor <= 0) GameDirector.ChangeScene(GameDirector.SceneID.SCENE_GAME);
+    //}
 
     private void SetIndex()
     {
