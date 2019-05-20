@@ -100,6 +100,7 @@ namespace Momoya
         public GameObject hpCanvas;//HPUIのキャンバス
         public GameObject hpGaugePrehab;//HPゲージプレハブ
 
+        
         // Texture2D screenTexture;
         // public Camera camera;
 
@@ -191,24 +192,26 @@ namespace Momoya
         //Move関数
         public override void Move()
         {
-           
+
+            
+
+           ///もしプレイ状態だったら
             if (mode == Mode.Play)
             {
                 if (flag.Is((uint)StateFlag.Goal))
                 {
+                   
                     //ゴールしたら速度をゼロにする
-                    vec = Vector3.zero;
+                    // 
                     time += Time.deltaTime;
 
                     Debug.Log(time);
 
                    if(time > goalTime)
                     {
-                        result.Flag();
+                       // result.Flag();
                     }
 
-
-                   
                     return;
                 }
                 //リセット用(デバッグ)
@@ -612,8 +615,28 @@ namespace Momoya
             }
         }
 
+        public void OnTriggerEnter(Collider other)
+        {
+            if (other.transform.tag == "GoalLine")
+            {
+                gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
+                SphereCollider sc = gameObject.AddComponent(typeof(SphereCollider)) as SphereCollider;
+                sc.radius = 1.0f;
+                vec = new Vector3(0, vec.y, 0);
+                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
+                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX;
+                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY;
+                flag.On((uint)StateFlag.Goal);
+            }
+
+        }
+
+
         public void OnCollisionEnter(Collision collision)
         {
+           
+
             if(collision.transform.tag == "Monster")
             {
                 knockBackFlag = true;
@@ -642,16 +665,13 @@ namespace Momoya
         {
             if (collision.transform.tag == "Goal")
             {
-                flag.On((uint)StateFlag.Goal);
+             
             }
             //当たった何かのタグを調べる
             switch (collision.transform.tag)
             {
                 //case "Ground": flag.On((uint)StateFlag.Jump);   break; //groundと触れていればジャンプフラグをtrueにする
-                case "Goal":
-                    flag.On((uint)StateFlag.Goal);
-                    Debug.Log("Goal");
-                    break;
+              
             }
 
             //ジャンプ中

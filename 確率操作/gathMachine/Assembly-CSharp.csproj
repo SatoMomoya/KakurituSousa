@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scenes\Momoya\MonstersScript\Script\Enemy.cs" />
     <Compile Include="Assets\Scenes\Momoya\MonstersScript\Script\Monster.cs" />
     <Compile Include="Assets\Scenes\Momoya\MonstersScript\Script\Player.cs" />
+    <Compile Include="Assets\Scenes\Momoya\MonstersScript\Script\PlayerPush.cs" />
     <Compile Include="Assets\Scenes\Momoya\Object.cs" />
     <Compile Include="Assets\Scenes\Momoya\result\CreateStar.cs" />
     <Compile Include="Assets\Scenes\Okumura\AutoTileMap.cs" />

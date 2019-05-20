@@ -11,6 +11,7 @@ TagManager:
   - Wall
   - GameDirector
   - SwordCollision
+  - GoalLine
   layers:
   - Default
   - TransparentFX
@@ -32,7 +33,7 @@ TagManager:
   - SwordCollision
   - Sword
   - Wand
-  - 
+  - GoalRail
   - 
   - 
   - 

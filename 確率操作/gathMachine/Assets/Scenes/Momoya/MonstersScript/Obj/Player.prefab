@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 37426dfe5cfb14626a6e1c60f8d927eb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 405846fadf3d47649848bd9d1fd7d932, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
   setHp: 10
   setAttack: 10
   setSpeed: 10
+  result: {fileID: 0}
   haveItem:
   - {fileID: 0}
   - {fileID: 0}
@@ -157,6 +158,14 @@ MonoBehaviour:
   gravity2: {x: 0, y: -40, z: 0}
   mode: 0
   goalTime: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  bulletPrehab: {fileID: 0}
+  enemy1: {fileID: 0}
+  hpDirector: {fileID: 0}
+  hpCanvas: {fileID: 0}
+  hpGaugePrehab: {fileID: 0}
 --- !u!95 &1955051528540566204
 Animator:
   serializedVersion: 3
