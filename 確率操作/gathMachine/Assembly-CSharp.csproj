@@ -92,11 +92,13 @@
     <Compile Include="Assets\Scenes\Okumura\TileMapEditor.cs" />
     <Compile Include="Assets\Scenes\Ono\GaugeController.cs" />
     <Compile Include="Assets\Scenes\Ono\GaugeDirector.cs" />
+    <Compile Include="Assets\Scenes\Ono\Scripts\Manu.cs" />
     <Compile Include="Assets\Scenes\Ono\Scripts\Select\ArrowControl.cs" />
     <Compile Include="Assets\Scenes\Ono\Scripts\Select\GameDirector.cs" />
     <Compile Include="Assets\Scenes\Ono\Scripts\Select\SelectIndex.cs" />
     <Compile Include="Assets\Scenes\Ono\Scripts\Select\StageSelect.cs" />
     <Compile Include="Assets\Scenes\Ono\Title\ChangeSelect.cs" />
+    <Compile Include="Assets\Scenes\Rotation.cs" />
     <Compile Include="Assets\Scenes\Teramoto\Title.cs" />
     <Compile Include="Assets\Scenes\Weapon\BulletController.cs" />
     <Compile Include="Assets\Scenes\Weapon\EnemyAttackZone.cs" />
