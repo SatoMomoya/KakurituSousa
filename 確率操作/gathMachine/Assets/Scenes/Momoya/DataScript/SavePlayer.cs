@@ -53,7 +53,7 @@ namespace Momoya
           
 
             fileName = "PlayerData.csv";
-            filePath = Application.persistentDataPath +"\\Data\\" + fileName;
+            filePath = Application.dataPath +"/StreamingAssets" + @"\Data\" + fileName;
             _csvData = new List<string>();
 
             saveFlag = false;
