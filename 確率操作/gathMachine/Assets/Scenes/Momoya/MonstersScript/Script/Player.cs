@@ -158,7 +158,7 @@ namespace Momoya
             //リストに追加
             hpDirector.addHPGauge(gauge);
             //敵のレイヤーでモンスターにスクリプトを入れる
-            monster = transform.GetComponent<Player>();
+            monster = GetComponent<Player>();
             
             //リストに追加
             hpDirector.addMonster(monster);

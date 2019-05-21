@@ -12,18 +12,16 @@ public class GaugeDirector : MonoBehaviour
     {
         monsterList = new List<Momoya.Monster>();
         hpGaugeList = new List<GaugeController>();
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(monsterList.Count);
         for (int i = 0; i < monsterList.Count; i++)
         {
             hpGaugeList[i].SetMonster(monsterList[i]);
-
-            //if(monsterList[i])
-            
         }
     }
 
