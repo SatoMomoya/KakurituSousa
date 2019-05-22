@@ -6,6 +6,7 @@ using UnityEngine;
 public class Rotation : MonoBehaviour
 {
     public List<GameObject> ball_List;
+    public GameObject ball;
     private List<Vector3> vec;
     public GameObject m_center;
     public GameObject m_exit;
@@ -42,7 +43,8 @@ public class Rotation : MonoBehaviour
         {
             ball_List[0].transform.parent = null;
             ball_List[0].transform.parent = m_exit.transform;
-            ball_List[0].transform.position = m_exit.transform.position;
+            ball_List[0].transform.position = new Vector3(100, 0, 0);
+            ball.transform.position = m_exit.transform.position;
             flag = true;
         }
         if(flag==true)
