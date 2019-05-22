@@ -42,12 +42,14 @@ public class Manu : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 m_flag = true;
+                scale = 1;
             }
 
 
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 m_flag = false;
+                scale = 1;
             }
 
             scale += speed/60;

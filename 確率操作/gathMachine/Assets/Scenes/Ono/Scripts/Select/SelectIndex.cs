@@ -10,6 +10,7 @@ public class SelectIndex : MonoBehaviour
     // スプライトの保存
     public List<Sprite> m_spriteList;
     public GameObject m_center;
+    public Image[] arrow;
     public float m_rotSpeed;
     // ImageUIの実体保存
     private List<Image> m_imgList = new List<Image>();
@@ -26,6 +27,7 @@ public class SelectIndex : MonoBehaviour
     private bool m_changeColorFlag;
     int num;
     public GameDirector rarity;
+    private bool flag;
     // Use this for initialization
     void Start()
     {
@@ -37,7 +39,7 @@ public class SelectIndex : MonoBehaviour
         m_changeColorFlag = false;
         SetImage();
         num = 0;
-
+        
     }
 
     // Update is called once per frame
@@ -51,6 +53,24 @@ public class SelectIndex : MonoBehaviour
             GetRarity();
             //シーンの移行
             SceneManager.LoadScene("Stagetest");
+        }
+
+        if (flag==true&& m_interval <= 60)
+        {
+            arrow[0].color = new Color(1, 0, 0);
+        }
+        else
+        {
+            arrow[0].color = new Color(1, 1, 1);
+        }
+
+        if (flag == false && m_interval <= 60)
+        {
+            arrow[1].color = new Color(1, 0, 0);
+        }
+        else
+        {
+            arrow[1].color = new Color(1, 1,1);
         }
         GetRarity();
         Debug.Log(rarity.selectGyat);
@@ -69,6 +89,7 @@ public class SelectIndex : MonoBehaviour
                 num--;
             }
             m_interval = 0;
+            flag = true;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow)&& m_interval>=60)
         {
@@ -80,6 +101,7 @@ public class SelectIndex : MonoBehaviour
                 num++;
             }
             m_interval = 0;
+            flag = false;
         }
         if (num >= 5) num = 1;
         if (num <= 0) num = 4;
@@ -94,7 +116,7 @@ public class SelectIndex : MonoBehaviour
         {
             Image tmpImage = Instantiate<Image>(m_preImage, m_center.transform) as Image;
             tmpImage.sprite = m_spriteList[i];
-            tmpImage.transform.localScale = new Vector3(2, 2, 2);
+            tmpImage.transform.localScale = new Vector3(2.3f, 2.3f, 2.3f);
             m_imgList.Add(tmpImage);
         }
 
