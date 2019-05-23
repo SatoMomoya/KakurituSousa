@@ -12,6 +12,8 @@ TagManager:
   - GameDirector
   - SwordCollision
   - GoalLine
+  - GoalCapsel
+  - GoalCapsel2
   layers:
   - Default
   - TransparentFX

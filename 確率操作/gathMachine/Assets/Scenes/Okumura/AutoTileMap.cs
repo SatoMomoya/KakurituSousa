@@ -100,6 +100,12 @@ public class AutoTileMap : MonoBehaviour
         UnityEngine.GameObject head = UnityEngine.GameObject.Find("HeadImage");
         UnityEngine.GameObject sword = UnityEngine.GameObject.Find("SwordImage");
 
+        // テスト
+        Debug.Log("1"+m_player);
+        Debug.Log("2"+m_player.haveItem[2]);
+        Debug.Log("3"+m_player.haveItem[2].transform.GetChild(0));
+        Debug.Log("4"+m_player.haveItem[2].transform.GetChild(0).GetComponent<SpriteRenderer>());
+        Debug.Log("5" + m_player.haveItem[2].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.texture);
         body.GetComponent<UnityEngine.UI.RawImage>().texture = m_player.haveItem[2].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.texture;
         head.GetComponent<UnityEngine.UI.RawImage>().texture = m_player.haveItem[1].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.texture;
         sword.GetComponent<UnityEngine.UI.RawImage>().texture = m_player.haveItem[0].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.texture;

@@ -58,7 +58,7 @@ namespace Momoya
         [SerializeField]
         private  Mode mode;
         [SerializeField]
-        private float goalTime = 1.0f;
+        private float goalTime = 10.0f;
         private float time;
 
         public LayerMask layerMask; //レイヤーマスク
@@ -100,6 +100,9 @@ namespace Momoya
         public GameObject hpCanvas;//HPUIのキャンバス
         public GameObject hpGaugePrehab;//HPゲージプレハブ
 
+        private int feadOutCount;
+        private const int feadOutTime = 5;
+        private bool feadFlag;
         
         // Texture2D screenTexture;
         // public Camera camera;
@@ -187,6 +190,8 @@ namespace Momoya
             wandActionFlag = false;
             wandActionCount = 0;
             playerRightLeftFlag = true;
+            feadOutCount = 0;
+            feadFlag = false;
         }
 
         //Move関数
@@ -200,16 +205,24 @@ namespace Momoya
             {
                 if (flag.Is((uint)StateFlag.Goal))
                 {
-                   
+                    if(feadFlag)
+                    {
+                        feadOutCount++;
+                    }
+                    
+                    if(feadOutCount > feadOutTime)
+                    {
+                        gameObject.SetActive(false);
+                    }
                     //ゴールしたら速度をゼロにする
                     // 
                     time += Time.deltaTime;
 
-                    Debug.Log(time);
+                    //Debug.Log(time);
 
                    if(time > goalTime)
                     {
-                       // result.Flag();
+                        result.Flag();
                     }
 
                     return;
@@ -375,8 +388,8 @@ namespace Momoya
 
                 }
                 //下の赤い線
-                Debug.DrawLine(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - jumpLine, transform.position.z), Color.red);
-                Debug.DrawLine(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - jumpLine, transform.position.z), Color.red);
+                Debug.DrawLine(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - jumpLine -10, transform.position.z), Color.red);
+                Debug.DrawLine(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - jumpLine -10, transform.position.z), Color.red);
 
                 //上の青い横の線
                 Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), Color.blue);
@@ -557,9 +570,10 @@ namespace Momoya
         //ジャンプするための関数
         private void Jump()
         {
+            Debug.Log(flag.Is((uint)StateFlag.Jump));
             //地面についている
-            if (Physics.Linecast(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - jumpLine, transform.position.z), layerMask)||
-                Physics.Linecast(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - jumpLine, transform.position.z), layerMask))
+            if (Physics.Linecast(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - jumpLine -10, transform.position.z), layerMask)||
+                Physics.Linecast(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - jumpLine -10, transform.position.z), layerMask))
             {
                
                 flag.On((uint)StateFlag.Jump);
@@ -580,6 +594,7 @@ namespace Momoya
             {
                 GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
                 animator.SetBool("IsJump", true);
+                Debug.Log("とんだ");
 
             }
             
@@ -617,6 +632,14 @@ namespace Momoya
 
         public void OnTriggerEnter(Collider other)
         {
+            if(other.transform.tag == "GoalCapsel" || other.transform.tag == "GoalCapsel2")
+            {
+                transform.parent = other.transform;
+                feadFlag = true;
+                flag.On((uint)StateFlag.Goal);
+                
+            }
+
             if (other.transform.tag == "GoalLine")
             {
                 gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
@@ -627,7 +650,7 @@ namespace Momoya
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX;
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY;
-                flag.On((uint)StateFlag.Goal);
+                
             }
 
         }
@@ -635,9 +658,15 @@ namespace Momoya
 
         public void OnCollisionEnter(Collision collision)
         {
-           
 
-            if(collision.transform.tag == "Monster")
+            if (collision.transform.tag == "Goal")
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.zero, ForceMode.Acceleration);
+                GetComponent<Rigidbody>().useGravity = false;
+                
+                flag.On((uint)StateFlag.Goal);
+            }
+            if (collision.transform.tag == "Monster")
             {
                 knockBackFlag = true;
                 knockBackPos = collision.transform.position;
@@ -663,17 +692,6 @@ namespace Momoya
 
         public  void OnCollisionStay(Collision collision)
         {
-            if (collision.transform.tag == "Goal")
-            {
-             
-            }
-            //当たった何かのタグを調べる
-            switch (collision.transform.tag)
-            {
-                //case "Ground": flag.On((uint)StateFlag.Jump);   break; //groundと触れていればジャンプフラグをtrueにする
-              
-            }
-
             //ジャンプ中
             if (!flag.Is((uint)StateFlag.Jump))
             {

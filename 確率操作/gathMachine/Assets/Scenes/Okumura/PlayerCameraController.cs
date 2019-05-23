@@ -36,6 +36,10 @@ public class PlayerCameraController : MonoBehaviour
     int m_waitCount; // 待つカウント数
     bool m_startFlag; // フラグ
 
+    private Momoya.Player player;
+
+    public GameObject goalCapsel;
+    private CapselHit capselHit;
     // 初期化処理
     void Start()
     {
@@ -56,94 +60,107 @@ public class PlayerCameraController : MonoBehaviour
 
         // フラグの初期化
         m_startFlag = false;
+
+        player = m_player.GetComponent<Momoya.Player>();
+
+        capselHit = goalCapsel.GetComponent<CapselHit>();
     }
 
     // 更新処理
     void Update()
     {
-        Debug.Log(m_stageChild + "この数");
-        if (m_startFlag == false)
-        {
-            m_stageChild = m_autoStage.transform.childCount;
-            m_startFlag = true;
-        }
 
-        // プレイヤーの位置の更新
-        m_playerPos = m_player.transform.localPosition;
+        if(!player.GoalFlag())
+        {
+            Debug.Log(m_stageChild + "この数");
+            if (m_startFlag == false)
+            {
+                m_stageChild = m_autoStage.transform.childCount;
+                m_startFlag = true;
+            }
 
-        // プレイヤーの位置が左の最大値を超えたら
-        if (m_playerPos.x < m_leftMaxPos)
-        {
-            // 最大値にする
-            this.transform.localPosition = new Vector3(m_leftMaxPos, m_cameraPos.y + m_cameraTop, this.transform.localPosition.z);
-        }
-        else
-        {
-            // プレイヤーの位置が右の最大値を超えたら
-            if (m_playerPos.x > m_rightMaxPos)
+            // プレイヤーの位置の更新
+            m_playerPos = m_player.transform.localPosition;
+
+            // プレイヤーの位置が左の最大値を超えたら
+            if (m_playerPos.x < m_leftMaxPos)
             {
                 // 最大値にする
-                this.transform.localPosition = new Vector3(m_rightMaxPos, m_cameraPos.y + m_cameraTop, this.transform.localPosition.z);
+                this.transform.localPosition = new Vector3(m_leftMaxPos, m_cameraPos.y + m_cameraTop, this.transform.localPosition.z);
             }
             else
             {
-                // プレイヤーを中心にする
-                this.transform.localPosition = new Vector3(m_playerPos.x, m_cameraPos.y + m_cameraTop, this.transform.localPosition.z);
-            }
-        }
-
-        // カメラのY位置がプレイヤーの位置より低かったら
-        if (m_cameraPos.y < m_playerPos.y)
-        {
-            // スクロールする
-            m_cameraPos.y += -m_velocity;
-
-            // カメラとプレイヤーの距離を取る
-            float d = m_playerPos.y - m_cameraPos.y;
-
-            // プレイヤーがカメラ外になったら
-            if (d > m_cameraMaxDistance)
-            {
-                if (m_playerDistanceFlag == false)
+                // プレイヤーの位置が右の最大値を超えたら
+                if (m_playerPos.x > m_rightMaxPos)
                 {
-                    m_autoStage.transform.GetChild(0).gameObject.AddComponent<BackMove>();
+                    // 最大値にする
+                    this.transform.localPosition = new Vector3(m_rightMaxPos, m_cameraPos.y + m_cameraTop, this.transform.localPosition.z);
                 }
-                // フラグを変える
-                m_playerDistanceFlag = true;
+                else
+                {
+                    // プレイヤーを中心にする
+                    this.transform.localPosition = new Vector3(m_playerPos.x, m_cameraPos.y + m_cameraTop, this.transform.localPosition.z);
+                }
+            }
+
+            // カメラのY位置がプレイヤーの位置より低かったら
+            if (m_cameraPos.y < m_playerPos.y)
+            {
+                // スクロールする
+                m_cameraPos.y += -m_velocity;
+
+                // カメラとプレイヤーの距離を取る
+                float d = m_playerPos.y - m_cameraPos.y;
+
+                // プレイヤーがカメラ外になったら
+                if (d > m_cameraMaxDistance)
+                {
+                    if (m_playerDistanceFlag == false)
+                    {
+                        m_autoStage.transform.GetChild(0).gameObject.AddComponent<BackMove>();
+                    }
+                    // フラグを変える
+                    m_playerDistanceFlag = true;
+
+                }
+                else
+                {
+                    // m_playerDistanceFlag = false;
+                }
 
             }
             else
             {
-                // m_playerDistanceFlag = false;
+                // プレイヤーのY位置にする
+                m_cameraPos.y = m_playerPos.y;
             }
 
+            // ステージを動かす
+            // MoveStage(m_playerDistanceFlag);
+
+            if (m_playerDistanceFlag)
+            {
+                m_waitCount++;
+                if (m_waitCount > m_waitMaxCount)
+                {
+                    if (m_stageChild > 0)
+                    {
+                        for (int i = 0; i < 30; i++)
+                        {
+                            m_autoStage.transform.GetChild(m_stageChild - 1).gameObject.AddComponent<BackMove>();
+                            m_stageChild--;
+                        }
+                        m_waitCount = 0;
+                    }
+
+                }
+            }
         }
         else
         {
-            // プレイヤーのY位置にする
-            m_cameraPos.y = m_playerPos.y;
+            
         }
-
-        // ステージを動かす
-        // MoveStage(m_playerDistanceFlag);
-
-        if (m_playerDistanceFlag)
-        {
-            m_waitCount++;
-            if (m_waitCount > m_waitMaxCount)
-            {
-                if (m_stageChild > 0)
-                {
-                    for (int i = 0; i < 30; i++)
-                    {
-                        m_autoStage.transform.GetChild(m_stageChild - 1).gameObject.AddComponent<BackMove>();
-                        m_stageChild--;
-                    }
-                    m_waitCount = 0;
-                }
-
-            }
-        }
+        
     }
 
     // ステージを動かす処理

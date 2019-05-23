@@ -33,6 +33,8 @@ public class GaugeDirector : MonoBehaviour
     //HPゲージオブジェクトを追加
     public void addHPGauge(GaugeController hpGauge)
     {
+        Debug.Log(hpGauge);
+
         if (hpGauge) hpGaugeList.Add(hpGauge);
     }
 
