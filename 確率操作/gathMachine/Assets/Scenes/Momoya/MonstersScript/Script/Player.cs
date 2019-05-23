@@ -205,7 +205,7 @@ namespace Momoya
                     // 
                     time += Time.deltaTime;
 
-                    Debug.Log(time);
+
 
                    if(time > goalTime)
                     {

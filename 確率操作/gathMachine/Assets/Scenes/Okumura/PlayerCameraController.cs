@@ -61,7 +61,7 @@ public class PlayerCameraController : MonoBehaviour
     // 更新処理
     void Update()
     {
-        Debug.Log(m_stageChild + "この数");
+
         if (m_startFlag == false)
         {
             m_stageChild = m_autoStage.transform.childCount;
