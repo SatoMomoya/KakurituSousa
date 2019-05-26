@@ -36,7 +36,7 @@ public class UiDisplay : MonoBehaviour
         m_img.sprite = m_sprite;
         m_img.transform.parent = this.transform;
         m_img.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-        m_img.transform.localPosition = new Vector3(0, 8, 0);
+        m_img.transform.localPosition = new Vector3(0, 2, 0);
     }
     private void OnTriggerEnter(Collider collision)
     {
