@@ -19,6 +19,8 @@ public class MetalEnemyController : Momoya.Enemy
     public LayerMask playerLayer;
     private Momoya.Player player;
     private GameObject playerObj;
+    private Goto.Damage damageSc;
+    private bool knockBackFlag;
 
     //初期化
     public override void Initialize()
@@ -26,6 +28,7 @@ public class MetalEnemyController : Momoya.Enemy
         playerObj = GameObject.Find("Player");
         player = playerObj.GetComponent<Momoya.Player>();
         enemyVision = GetComponentInChildren<EnemyVision>();
+        damageSc = GetComponent<Goto.Damage>();
         vec.x = 0;
         knockBackCount = 0;
 
@@ -37,6 +40,7 @@ public class MetalEnemyController : Momoya.Enemy
         escapeCount = 0;
         escapeTime = 300;
         rarity = startRarity;
+        knockBackFlag = false;
     }
 
     //移動
@@ -79,13 +83,18 @@ public class MetalEnemyController : Momoya.Enemy
         }
 
         //攻撃を受けたらHPを減らす
-        if (damageFlag)
+        if(knockBackFlag)
         {
             KnockBack();
-            float damege = Damege(player, this);
-            status.hp = status.hp - (int)damege;
-            damageFlag = false;
+            if (damageFlag)
+            {
+                damageSc.DamageFlag = true;
+                float damege = Damege(player, this);
+                status.hp = status.hp - (int)damege;
+                damageFlag = false;
+            }
         }
+       
         //HPが0以下になったら消える
         if (status.hp <= 0)
         {
@@ -130,6 +139,7 @@ public class MetalEnemyController : Momoya.Enemy
         //0.5フレームノックバックする
         if (knockBackCount > knockBackTime)
         {
+            damageSc.DamageFlag = false;
             knockBackCount = 0;
             if (vec.x >= 0)
             {
@@ -139,6 +149,7 @@ public class MetalEnemyController : Momoya.Enemy
             {
                 vec.x = -1;
             }
+            knockBackFlag = false;
         }
 
     }
@@ -150,6 +161,7 @@ public class MetalEnemyController : Momoya.Enemy
         {
 
             playerPos = other.transform.position;
+            knockBackFlag = true;
             damageFlag = true;
         }
     }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 984628974864246337}
   - component: {fileID: 984628974864246338}
   - component: {fileID: 984628974864246339}
+  - component: {fileID: 2727839232085120009}
   - component: {fileID: 984628974864246340}
   m_Layer: 13
   m_Name: EnemyRPrehab
@@ -118,7 +119,7 @@ MonoBehaviour:
   setHp: 20
   setAttack: 10
   setSpeed: 10
-  dropItem: {fileID: 2920759180946327478, guid: 8ddc5d2c71d5cb3479028288e54b9ed0,
+  dropItem: {fileID: 7374698392196047047, guid: cf8c980c429ab234abeeb6b35af76d62,
     type: 3}
   dropNum: 0
   dropProbability: 0
@@ -141,6 +142,19 @@ CapsuleCollider:
   m_Height: 0.6278003
   m_Direction: 1
   m_Center: {x: -0.004081726, y: -0.00609985, z: 0}
+--- !u!114 &2727839232085120009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984628974864246341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0368454a326fac04db88064e2d24177e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  INTERVAL: 2
 --- !u!114 &984628974864246340
 MonoBehaviour:
   m_ObjectHideFlags: 0

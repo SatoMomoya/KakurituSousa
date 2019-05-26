@@ -20,7 +20,8 @@ public class LoiterEnemyController : Momoya.Enemy
     private int wallHitCount;       //壁に当たっているカウント
     private int wallHitTime;        //壁に当たっている時間
     private Vector3 lastVec;        //最後の移動
-
+    private Goto.Damage damageSc;
+    private bool knockBackFlag;
     //初期化
     public override void Initialize()
     {
@@ -29,6 +30,7 @@ public class LoiterEnemyController : Momoya.Enemy
         player = playerObj.GetComponent<Momoya.Player>();
 
         flag.Off((uint)StateFlag.Chase);
+        damageSc = GetComponent<Goto.Damage>();
         vec.x = 1;
 
         knockBackCount = 0;
@@ -38,6 +40,7 @@ public class LoiterEnemyController : Momoya.Enemy
         wallHitCount = 0;
         wallHitTime = 30;
         rarity = startRarity;
+        knockBackFlag = false;
     }
 
     //移動
@@ -53,7 +56,7 @@ public class LoiterEnemyController : Momoya.Enemy
         {
             this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
         }
-        if (!damageFlag)
+        if (!knockBackFlag)
         {
             //徘徊
             Loiter();
@@ -69,7 +72,7 @@ public class LoiterEnemyController : Momoya.Enemy
         //攻撃を受けたらHPを減らす
         if (damageFlag)
         {
-            Debug.Log("aa" + player.Attack);
+            damageSc.DamageFlag = true;
             float damege = Damege(player, this);
             status.hp = status.hp - (int)damege;
             damageFlag = false;
@@ -133,8 +136,8 @@ public class LoiterEnemyController : Momoya.Enemy
         //0.5フレームノックバックする
         if (knockBackCount > knockBackTime)
         {
-            knockBackCount = 0;
-
+            damageSc.DamageFlag = false;
+            
             if (vec.x >= 0)
             {
                 vec.x = 1;
@@ -143,6 +146,8 @@ public class LoiterEnemyController : Momoya.Enemy
             {
                 vec.x = -1;
             }
+            knockBackCount = 0;
+            knockBackFlag = false;
         }
 
     }
@@ -153,6 +158,7 @@ public class LoiterEnemyController : Momoya.Enemy
         {
             
             playerPos = other.transform.position;
+            knockBackFlag = true;
             damageFlag = true;
         }
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Experimental.VFX;
 
 //プレイヤーのスクリプト
 
@@ -103,6 +104,8 @@ namespace Momoya
         private int feadOutCount;
         private const int feadOutTime = 5;
         private bool feadFlag;
+
+        private Goto.Damage damageScript;
         
         // Texture2D screenTexture;
         // public Camera camera;
@@ -141,6 +144,8 @@ namespace Momoya
             swordCol.SetActive(false);
             attackStateFlag.Off((uint)AttackState.CanAttack);       
             attackStateFlag.Off((uint)AttackState.CanNotAttack);    //アタックフラグをfalseに
+
+            damageScript = GetComponent<Goto.Damage>();
 
             animator = GetComponent<Animator>();
             animator.SetBool("IsWepon", true);
@@ -382,8 +387,8 @@ namespace Momoya
                 else
                 {
                     status.hp = status.hp - (int)Damege(enemy1, this);
-
-                    Debug.Log("HP = "+status.hp);
+                    damageScript.DamageFlag = true;
+                    
                     KnockBack(knockBackPos);
 
                 }
@@ -623,6 +628,7 @@ namespace Momoya
 
             if(knockBackCount > knockBackTime)
             {
+                damageScript.DamageFlag = false;
                 GetComponent<Rigidbody>().useGravity = true;
                 vec.x = 0;
                 knockBackCount = 0;

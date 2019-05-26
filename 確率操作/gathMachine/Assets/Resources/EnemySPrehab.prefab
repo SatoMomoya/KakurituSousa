@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 8665978340052657265}
   - component: {fileID: 3560151229662410661}
   - component: {fileID: 3170459082822283358}
+  - component: {fileID: 2264177908388216575}
   m_Layer: 14
   m_Name: EnemySPrehab
   m_TagString: Monster
@@ -202,7 +203,7 @@ MonoBehaviour:
   setHp: 5
   setAttack: 10
   setSpeed: 10
-  dropItem: {fileID: 2920759180946327478, guid: 8ddc5d2c71d5cb3479028288e54b9ed0,
+  dropItem: {fileID: 7374698392196047047, guid: cf8c980c429ab234abeeb6b35af76d62,
     type: 3}
   dropNum: 0
   dropProbability: 0
@@ -214,3 +215,16 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 32768
+--- !u!114 &2264177908388216575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9083394353049395370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0368454a326fac04db88064e2d24177e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  INTERVAL: 2

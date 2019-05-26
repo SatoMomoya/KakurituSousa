@@ -30,6 +30,7 @@ public class EnemyController : Momoya.Enemy
     private GameObject playerObj;
 
     private bool damageFlag;
+    private Goto.Damage damageSc;
 
     //float count;
     //初期化
@@ -41,6 +42,7 @@ public class EnemyController : Momoya.Enemy
         enemyAttackZone = FindObjectOfType<EnemyAttackZone>();
         swordController = FindObjectOfType<SwordController>();
         flag.Off((uint)StateFlag.Chase);
+        damageSc = GetComponent<Goto.Damage>();
         vec.x = 1;
         hitFlag = false;
         visionFlag = false;
@@ -52,16 +54,12 @@ public class EnemyController : Momoya.Enemy
         
         knockBackTime = 15;
         damageFlag = false;
-        //count = 0;
         rarity = startRarity;
     }
 
     //移動
     public override void Move()
     {
-        //count+=0.1f;
-        //vec.y = Mathf.Sin(count);
-
         //進む向きで画像を反転する
         if (vec.x > 0)
         {
@@ -117,14 +115,19 @@ public class EnemyController : Momoya.Enemy
         CatchOnWall();
 
         //攻撃を受けたらHPを減らす
-        if (damageFlag)
+        if(hitFlag)
         {
             
-            float damege = Damege(player, this);
-            status.hp = status.hp - (int)damege;
-            damageFlag = false;
-            Debug.Log("HP="+status.hp);
+            if (damageFlag)
+            {
+                damageSc.DamageFlag = true;
+                float damege = Damege(player, this);
+                status.hp = status.hp - (int)damege;
+                damageFlag = false;
+                Debug.Log("HP=" + status.hp);
+            }
         }
+        
         //HPが0以下になったら消える
         if (status.hp <= 0)
         {
@@ -201,9 +204,9 @@ public class EnemyController : Momoya.Enemy
         //0.5フレームノックバックする
         if (knockBackCount > knockBackTime)
         {
-            
+            damageSc.DamageFlag = false;
             attackFlag = false;
-            hitFlag = false;
+            
             knockBackCount = 0;
             rushAttackCount = 0;
             buildUpPowerCount = 0;
@@ -216,6 +219,8 @@ public class EnemyController : Momoya.Enemy
             {
                 vec.x = -1;
             }
+
+            hitFlag = false;
         }
 
     }

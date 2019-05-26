@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 2056618400330204990}
   - component: {fileID: 5880005303563404868}
   - component: {fileID: 5481333331311114772}
+  - component: {fileID: 703570176152947614}
   - component: {fileID: 145342893681760245}
   m_Layer: 12
   m_Name: EnemyPrehab
@@ -260,7 +261,7 @@ MonoBehaviour:
   setHp: 30
   setAttack: 10
   setSpeed: 10
-  dropItem: {fileID: 2920759180946327478, guid: 8ddc5d2c71d5cb3479028288e54b9ed0,
+  dropItem: {fileID: 7374698392196047047, guid: cf8c980c429ab234abeeb6b35af76d62,
     type: 3}
   dropNum: 0
   dropProbability: 0
@@ -271,6 +272,19 @@ MonoBehaviour:
   rushAttackTime: 60
   buildUpPowerTime: 30
   floorDistanceX: 0
+--- !u!114 &703570176152947614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7609405298953385975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0368454a326fac04db88064e2d24177e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  INTERVAL: 2
 --- !u!136 &145342893681760245
 CapsuleCollider:
   m_ObjectHideFlags: 0
