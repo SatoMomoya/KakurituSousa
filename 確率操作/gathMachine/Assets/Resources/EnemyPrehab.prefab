@@ -258,10 +258,10 @@ MonoBehaviour:
   speed: 1
   jumpPower: 0
   startRarity: 1
-  setHp: 30
-  setAttack: 10
+  setHp: 50
+  setAttack: 25
   setSpeed: 10
-  dropItem: {fileID: 7374698392196047047, guid: cf8c980c429ab234abeeb6b35af76d62,
+  dropItem: {fileID: 8601894700418176030, guid: 26c986754e5d5d84d95bef53a6df3b71,
     type: 3}
   dropNum: 0
   dropProbability: 0

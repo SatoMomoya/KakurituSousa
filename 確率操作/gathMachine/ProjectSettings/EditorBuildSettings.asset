@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/teramotoTeast.unity
     guid: f620cdde7b03f77469f7793d15e005de
+  - enabled: 1
+    path: Assets/Scenes/TitleCopyScene.unity
+    guid: 6b45548aa25be314aa5e07485699c47c
   - enabled: 1
     path: Assets/Scenes/SelectScene.unity
     guid: ddbc4df1eeeecef4b94b8ac82547f286
@@ -21,12 +24,18 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
+    path: Assets/Scenes/TutorialScene.unity
+    guid: ddf47080b1e63304b9372b82c4146b67
+  - enabled: 1
+    path: Assets/Scenes/PickUpScene.unity
+    guid: b2ca25669658501429dba5430a906f3c
+  - enabled: 1
     path: Assets/Scenes/TunagiScene.unity
     guid: e27b99ffdc6f9874697e50f708e0eff6
   - enabled: 1
-    path: Assets/Scenes/Goto/Result.unity
+    path: Assets/Scenes/Result.unity
     guid: c875198ce77e925489d74528fb2e630e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: a7e818c53d17aed4b8551d945d60738d
   m_configObjects: {}

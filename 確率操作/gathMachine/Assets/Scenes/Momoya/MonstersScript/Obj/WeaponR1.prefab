@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 99}
   - component: {fileID: 171}
   - component: {fileID: 141}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: WeaponR1
   m_TagString: Item
   m_Icon: {fileID: 0}

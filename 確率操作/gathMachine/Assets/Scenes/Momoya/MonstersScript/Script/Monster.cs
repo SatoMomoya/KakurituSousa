@@ -126,10 +126,10 @@ namespace Momoya
             //移動させる
             GetComponent<Rigidbody>().velocity = new Vector3(direction.x, GetComponent<Rigidbody>().velocity.y, direction.z);
 
-            if(transform.position.y < -100.0f)
-            {
-                this.transform.position = startPos;
-            }
+            //if(transform.position.y < -100.0f)
+            //{
+            //    this.transform.position = startPos;
+            //}
            
         }
 

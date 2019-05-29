@@ -59,8 +59,8 @@ namespace Momoya
         [SerializeField]
         private  Mode mode;
         [SerializeField]
-        private float goalTime = 10.0f;
-        private float time;
+        private int goalTime = 1200;
+        private int time;
 
         public LayerMask layerMask; //レイヤーマスク
         private float lineX;        //線の横の幅
@@ -77,7 +77,7 @@ namespace Momoya
         private bool knockBackFlag;     //ノックバックするフラグ
         private Vector3 knockBackPos;   //ノックバックするときの敵の座標
         private GameObject swordCol;        //剣の当たり判定のオブジェクト 
-        private const int SwordActionTime = 16;     //剣のモーション時間
+        private const int SwordActionTime = 24;     //剣のモーション時間
         private int swordActionCount;               //剣のモーションカウント
         private bool swordActionFlag;               //剣のモーションフラグ
         private bool playerRightLeftFlag;       //trueの時は右向いている/falseの時は左向いている
@@ -85,8 +85,12 @@ namespace Momoya
         public GameObject bulletPrehab;
         private bool bulletCreateFlag;
         private bool wandActionFlag;
-        private const int WandActionTime = 8;     //杖のモーション時間
+        private const int WandActionTime = 50;      //杖のモーション時間
         private int wandActionCount;               //杖のモーションカウント
+
+        private bool axActionFlag;
+        private const int AxActionTime = 50;      //斧のモーション時間
+        private int axActionCount;               //斧のモーションカウント
 
         private int maxHP;
 
@@ -106,7 +110,21 @@ namespace Momoya
         private bool feadFlag;
 
         private Goto.Damage damageScript;
-        
+        private bool resultFlag;
+
+        public AudioClip sound;
+        public AudioClip atk;
+        private AudioSource audioSound;
+
+        public static int weponHaveNum = 0;
+
+        private bool goalFlag;
+
+        public GameObject boxObjCol;
+
+        private GameObject doDesObj;
+        private WeponData weponData;
+
         // Texture2D screenTexture;
         // public Camera camera;
 
@@ -148,7 +166,7 @@ namespace Momoya
             damageScript = GetComponent<Goto.Damage>();
 
             animator = GetComponent<Animator>();
-            animator.SetBool("IsWepon", true);
+            animator.SetBool("IsSword", true);
 
             jumpFallFalg = false;
 
@@ -168,10 +186,10 @@ namespace Momoya
 
             //HPゲージの生成
             GameObject hpObj = Instantiate(hpGaugePrehab) as GameObject;
-            //HPUIキャンバスの子に設定
-            hpObj.transform.SetParent(hpCanvas.transform, false);
             //ゲージのスクリプトを取得
             gauge = hpObj.GetComponent<GaugeController>();
+            //HPUIキャンバスの子に設定
+            hpObj.transform.SetParent(hpCanvas.transform, false);
             //リストに追加
             hpDirector.addHPGauge(gauge);
             //敵のレイヤーでモンスターにスクリプトを入れる
@@ -194,9 +212,18 @@ namespace Momoya
             bulletCreateFlag = false;
             wandActionFlag = false;
             wandActionCount = 0;
+            axActionFlag = false;
+            axActionCount = 0;
             playerRightLeftFlag = true;
             feadOutCount = 0;
             feadFlag = false;
+            resultFlag = false;
+            audioSound = gameObject.GetComponent<AudioSource>();
+            goalFlag = false;
+            boxObjCol.SetActive(false);
+
+            doDesObj = GameObject.Find("DoDesObj");
+            weponData = doDesObj.GetComponent<WeponData>();
         }
 
         //Move関数
@@ -210,7 +237,8 @@ namespace Momoya
             {
                 if (flag.Is((uint)StateFlag.Goal))
                 {
-                    if(feadFlag)
+                    
+                    if (feadFlag)
                     {
                         feadOutCount++;
                     }
@@ -221,10 +249,8 @@ namespace Momoya
                     }
                     //ゴールしたら速度をゼロにする
                     // 
-                    time += Time.deltaTime;
-
-                    //Debug.Log(time);
-
+                    time += 1;
+                    Debug.Log(time);
                    if(time > goalTime)
                     {
                         result.Flag();
@@ -244,6 +270,12 @@ namespace Momoya
                     flag.On((uint)StateFlag.Goal);
                 }
 
+                
+                if(resultFlag)
+                {
+                    flag.On((uint)StateFlag.Goal);
+
+                }
 
                 //アイテムのポジション設定
                 SetItemPos();
@@ -254,11 +286,40 @@ namespace Momoya
 
                 if(haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
                 {
-                    animator.SetBool("IsWepon", true);
+                    animator.SetBool("IsWand", false);
+                    animator.SetBool("IsAx", false);
+
+                    animator.SetBool("IsSword", true);
+                    weponData.WeponNumber = 1;
+                }
+                else if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Wand"))
+                {
+                    animator.SetBool("IsSword", false);
+                    animator.SetBool("IsAx", false);
+
+                    animator.SetBool("IsWand", true);
+                    weponData.WeponNumber = 2;
                 }
                 else
                 {
-                    animator.SetBool("IsWepon", false);
+                    animator.SetBool("IsSword", false);
+                    animator.SetBool("IsWand", false);
+
+                    animator.SetBool("IsAx", true);
+                    weponData.WeponNumber = 3;
+                }
+
+                if (weponHaveNum == 1)
+                {
+                    animator.SetBool("IsSword", true);
+                }
+                else if (weponHaveNum == 2)
+                {
+                    animator.SetBool("IsWand", true);
+                }
+                else if (weponHaveNum == 3)
+                {
+                    animator.SetBool("IsAx", true);
                 }
 
                 if (!knockBackFlag)
@@ -266,12 +327,6 @@ namespace Momoya
                     //十字キーの入力をセット
                     vec.x = Input.GetAxis("Horizontal");
                     vec.y = Input.GetAxis("Vertical");
-
-                    if(Input.GetKeyDown(KeyCode.E))
-                    {
-
-                        
-                    }
 
                     //右押されたら右向き
                     if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
@@ -365,13 +420,18 @@ namespace Momoya
                     //zキーをしたら攻撃
                     if(Input.GetKeyDown(KeyCode.Z))
                     {
-                        if(haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
+                        audioSound.PlayOneShot(atk);
+                        if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
                         {
                             swordActionFlag = true;
                         }
-                        else
+                        else if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Wand"))
                         {
                             wandActionFlag = true;
+                        }
+                        else
+                        {
+                            axActionFlag = true;
                         }
                         
                     }
@@ -383,12 +443,19 @@ namespace Momoya
                     {
                         WandAttack();
                     }
+                    if(axActionFlag)
+                    {
+                        AxAttack();
+                    }
                 }
                 else
                 {
-                    status.hp = status.hp - (int)Damege(enemy1, this);
+                    if(SceneManager.GetActiveScene().name != "TutorialScene")
+                    {
+                        status.hp = status.hp - (int)Damege(enemy1, this);
+                        
+                    }
                     damageScript.DamageFlag = true;
-                    
                     KnockBack(knockBackPos);
 
                 }
@@ -519,7 +586,8 @@ namespace Momoya
         //アイテムの変更
         public void ChangeItem(Item item,int itemgroup)
         {
-           // Destroy(haveItem[(int)itemgroup].gameObject);
+            // Destroy(haveItem[(int)itemgroup].gameObject);
+            audioSound.PlayOneShot(sound);
             haveItem[(int)itemgroup] = item;
         }
 
@@ -528,7 +596,7 @@ namespace Momoya
         {
             swordActionCount++;
             animator.SetBool("IsAttack", true);
-            if(swordActionCount > 5)
+            if(swordActionCount > 10)
             {
                 swordCol.SetActive(true);
             }
@@ -551,7 +619,7 @@ namespace Momoya
 
             if(!bulletCreateFlag)
             {
-                if(wandActionCount > 5)
+                if(wandActionCount > 30)
                 {
                     GameObject bullet = Instantiate(bulletPrehab) as GameObject;
                     
@@ -572,6 +640,26 @@ namespace Momoya
 
         }
 
+        private void AxAttack()
+        {
+            axActionCount++;
+            animator.SetBool("IsAttack", true);
+            if (axActionCount > 35)
+            {
+                swordCol.SetActive(true);
+            }
+
+
+            if (axActionCount >= AxActionTime)
+            {
+                animator.SetBool("IsAttack", false);
+                animator.SetBool("IsStop", true);
+                swordCol.SetActive(false);
+                axActionCount = 0;
+                axActionFlag = false;
+            }
+        }
+
         //ジャンプするための関数
         private void Jump()
         {
@@ -582,7 +670,8 @@ namespace Momoya
             {
                
                 flag.On((uint)StateFlag.Jump);
-                
+                jumpFallFalg = false;
+                GetComponent<Rigidbody>().AddForce(gravity2, ForceMode.Acceleration);
             }
 
             //地面から離れた
@@ -599,8 +688,7 @@ namespace Momoya
             {
                 GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
                 animator.SetBool("IsJump", true);
-                Debug.Log("とんだ");
-
+                
             }
             
         }
@@ -642,7 +730,6 @@ namespace Momoya
             {
                 transform.parent = other.transform;
                 feadFlag = true;
-                flag.On((uint)StateFlag.Goal);
                 
             }
 
@@ -671,6 +758,9 @@ namespace Momoya
                 GetComponent<Rigidbody>().useGravity = false;
                 
                 flag.On((uint)StateFlag.Goal);
+                goalFlag = true;
+
+                boxObjCol.SetActive(true);
             }
             if (collision.transform.tag == "Monster")
             {
@@ -751,6 +841,20 @@ namespace Momoya
 
         }
 
+        public bool ResultFlag
+        {
+            get { return resultFlag; }
+            set { resultFlag = value; }
+
+        }
+
+        public bool JumpFallFlag
+        {
+            get { return jumpFallFalg; }
+            set { jumpFallFalg = value; }
+
+        }
+
         public int MaxHP()
         {
             return maxHP;
@@ -761,6 +865,16 @@ namespace Momoya
             return playerRightLeftFlag;
         }
 
+        public static int WeponHaveNumber()
+        {
+            return weponHaveNum;
+           
+        }
+
+        public bool GoalFlag()
+        {
+            return goalFlag;
+        }
     }
 
 }

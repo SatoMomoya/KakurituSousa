@@ -8,12 +8,12 @@ public class CreateStar : MonoBehaviour
     [SerializeField]
     int maxRarity = 5;
 
-    public Momoya.Player player;
+    private Momoya.Player player;
     public Momoya.SavePlayer load;
     public GameObject star001;
     public GameObject star002;
-
-   // public Text text;
+    private GameObject playerObj;
+    // public Text text;
 
     [SerializeField]
     float width;
@@ -21,11 +21,20 @@ public class CreateStar : MonoBehaviour
 
     float createtime = 3.0f;
     float time;
-   
+    int a;
+
+    private GameObject doDesObj;
+    private WeponData weponData;
+
     // Start is called before the first frame update
     void Start()
     {
-        geneFlag = false;   
+        geneFlag = false;
+        playerObj = GameObject.Find("Player");
+        player = playerObj.GetComponent<Momoya.Player>();
+
+        doDesObj = GameObject.Find("DoDesObj");
+        weponData = doDesObj.GetComponent<WeponData>();
     }
 
     // Update is called once per frame
@@ -60,10 +69,12 @@ public class CreateStar : MonoBehaviour
                  
                 }
                 geneFlag = true;
+           
             }
-       //   text.text = player.Rarity.ToString();
-       // }
+        //   text.text = player.Rarity.ToString();
+        // }
 
-        
+        a = weponData.WeponNumber;
+        Debug.Log(a);
     }
 }

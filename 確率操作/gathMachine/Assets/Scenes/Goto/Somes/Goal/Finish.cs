@@ -70,7 +70,7 @@ public class Finish : MonoBehaviour
                 _myObj.transform.position = new Vector3(_myObj.transform.position.x, _myObj.transform.position.y - 0.5f, _myObj.transform.position.z);
                 
             }
-           
+
         }
         
     }

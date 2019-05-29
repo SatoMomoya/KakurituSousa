@@ -7,18 +7,19 @@ public class ResultGo : MonoBehaviour
 {
     [SerializeField]
     float resultTime;
-    float time;
+
     int PlayerRaity;
     int conditions;
     public GameDirector changeScene;
     public Momoya.Player player;
     bool a;
+    private int time;
     // Start is called before the first frame update
     void Start()
     {
 
         PlayerRaity = player.Rarity;
-     
+        time = 0;
         a = false;
     }
 
@@ -45,12 +46,17 @@ public class ResultGo : MonoBehaviour
         }
         if (a == true)
         {
-            SceneManager.LoadScene("Result");
+            time += 1;
+            
         }
         else if (a == false)
         {
             SceneManager.LoadScene("SelectScene");
         }
-
+       
+        //if(time > 60)
+        //{
+        //    SceneManager.LoadScene("Result");
+        //}
     }
 }

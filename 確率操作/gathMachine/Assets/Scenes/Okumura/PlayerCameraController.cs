@@ -106,9 +106,11 @@ public class PlayerCameraController : MonoBehaviour
             // カメラのY位置がプレイヤーの位置より低かったら
             if (m_cameraPos.y < m_playerPos.y)
             {
-                // スクロールする
-                m_cameraPos.y += -m_velocity;
-
+               
+                    // スクロールする
+                    m_cameraPos.y += -m_velocity;
+                
+                
                 // カメラとプレイヤーの距離を取る
                 float d = m_playerPos.y - m_cameraPos.y;
 

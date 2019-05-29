@@ -130,12 +130,12 @@ namespace Momoya
 
             player.Name = "ぷろとくん"; //_csvData[(int)PlayerData.Name];//名前
             int tmp;
-            
+
             Int32.TryParse(_csvData[(int)PlayerData.Rarity], out tmp);//レアリティ
             player.Rarity = tmp; //int型に変換したものを入れる
 
             Int32.TryParse(_csvData[(int)PlayerData.HP], out tmp); //HP
-            player.HP = tmp;//int型に変換したものを入れる
+            player.HP = 30;//int型に変換したものを入れる
 
             Int32.TryParse(_csvData[(int)PlayerData.Attack], out tmp); //攻撃力
             player.Attack = tmp;//int型に変換したものを入れる
