@@ -75,6 +75,6 @@ public class CreateStar : MonoBehaviour
         // }
 
         a = weponData.WeponNumber;
-        Debug.Log(a);
+        //Debug.Log(a);
     }
 }

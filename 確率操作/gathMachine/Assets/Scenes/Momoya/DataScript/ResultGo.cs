@@ -35,7 +35,7 @@ public class ResultGo : MonoBehaviour
     //条件を満たしていなければセレクト画面へ
     public void Flag()
     {
-
+        Debug.Log("プレイヤーのレアリティ"+player.Rarity);
         if (PlayerRaity >= conditions)
         {
             a = true;
@@ -46,17 +46,27 @@ public class ResultGo : MonoBehaviour
         }
         if (a == true)
         {
+
             time += 1;
             
         }
         else if (a == false)
         {
-            SceneManager.LoadScene("SelectScene");
+            SceneManager.LoadScene("TitleCopyScene");
         }
-       
-        //if(time > 60)
-        //{
-        //    SceneManager.LoadScene("Result");
-        //}
+
+        if (time > 60)
+        {
+            if(player.HP <= 0)
+            {
+                Debug.Log("死んで通った");
+                //player.Rarity = player.Rarity -1;
+                //Debug.Log("プレイヤーのレアリティ==" + player.Rarity);
+                //player.Rarity(player.Rarity);
+                SceneManager.LoadScene("TitleCopyScene");
+
+            }
+            SceneManager.LoadScene("Result");
+        }
     }
 }

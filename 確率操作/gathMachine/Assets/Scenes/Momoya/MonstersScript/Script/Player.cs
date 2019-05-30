@@ -125,6 +125,19 @@ namespace Momoya
         private GameObject doDesObj;
         private WeponData weponData;
 
+        private bool goalLineFlag;
+
+        public GameObject maincamera;
+        private PlayerCameraController playerCamera;
+
+        private GameObject deadObj;
+
+        private int seceneChageCount;
+        private const int SECENE_CHAGETIME = 180;
+        private bool deadFlag;
+
+        public GameObject deadImage;
+
         // Texture2D screenTexture;
         // public Camera camera;
 
@@ -155,11 +168,14 @@ namespace Momoya
         //初期化関数
         public override void Initialize()
         {
-           
+            Debug.Log("A");
+
             this.attackStateFlag = GetComponent<Flag>();
 
             swordCol = transform.Find("SwordCollision").gameObject;
+            //deadObj = transform.Find("DeadObj").gameObject;
             swordCol.SetActive(false);
+            //deadObj.SetActive(false);
             attackStateFlag.Off((uint)AttackState.CanAttack);       
             attackStateFlag.Off((uint)AttackState.CanNotAttack);    //アタックフラグをfalseに
 
@@ -223,35 +239,44 @@ namespace Momoya
             boxObjCol.SetActive(false);
 
             doDesObj = GameObject.Find("DoDesObj");
+            
+            goalLineFlag = false;
+
+            //maincamera = Camera.main.gameObject;
+            playerCamera = maincamera.GetComponent<PlayerCameraController>();
+
+            deadFlag = false;
+            Debug.Log("A");
+            deadImage.SetActive(false);
             weponData = doDesObj.GetComponent<WeponData>();
+            //deadImage.GetComponent<UnityEngine.UI.Image>().enabled = false;
+            //GameObject.Find("DeadImage").GetComponent<UnityEngine.UI.Image>().enabled = false;
         }
 
         //Move関数
         public override void Move()
         {
 
-            
-
-           ///もしプレイ状態だったら
+            ///もしプレイ状態だったら
             if (mode == Mode.Play)
             {
                 if (flag.Is((uint)StateFlag.Goal))
                 {
-                    
+
                     if (feadFlag)
                     {
                         feadOutCount++;
                     }
-                    
-                    if(feadOutCount > feadOutTime)
+
+                    if (feadOutCount > feadOutTime)
                     {
                         gameObject.SetActive(false);
                     }
                     //ゴールしたら速度をゼロにする
                     // 
                     time += 1;
-                    Debug.Log(time);
-                   if(time > goalTime)
+
+                    if (time > goalTime)
                     {
                         result.Flag();
                     }
@@ -267,11 +292,33 @@ namespace Momoya
                 //HPが0になったとき
                 if (status.hp <= 0)
                 {
-                    flag.On((uint)StateFlag.Goal);
+                    deadFlag = true;
+
                 }
 
-                
-                if(resultFlag)
+                if (deadFlag)
+                {
+                    deadImage.SetActive(true);
+
+                    //deadObj.transform.position = new Vector3(deadObj.transform.position.x, deadObj.transform.position.y - 0.01f, deadObj.transform.position.z);
+                    //if (playerRightLeftFlag)
+                    //    deadObj.transform.localScale = new Vector3(Mathf.Abs(deadObj.transform.localScale.x), deadObj.transform.localScale.y, deadObj.transform.localScale.z);
+                    //else
+                    //    deadObj.transform.localScale = new Vector3(-Mathf.Abs(deadObj.transform.localScale.x), deadObj.transform.localScale.y, deadObj.transform.localScale.z);
+
+                    seceneChageCount++;
+                    vec.x = 0;
+                    GetComponent<Rigidbody>().useGravity = true;
+                    //deadObj.SetActive(true);
+                }
+                if (seceneChageCount > SECENE_CHAGETIME)
+                {
+                    flag.On((uint)StateFlag.Goal);
+
+                }
+
+
+                if (resultFlag)
                 {
                     flag.On((uint)StateFlag.Goal);
 
@@ -284,7 +331,7 @@ namespace Momoya
                 //プレイヤーのステース
                 PlayerStatus();
 
-                if(haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
+                if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
                 {
                     animator.SetBool("IsWand", false);
                     animator.SetBool("IsAx", false);
@@ -322,167 +369,176 @@ namespace Momoya
                     animator.SetBool("IsAx", true);
                 }
 
-                if (!knockBackFlag)
+                if (goalLineFlag == false)
                 {
-                    //十字キーの入力をセット
-                    vec.x = Input.GetAxis("Horizontal");
-                    vec.y = Input.GetAxis("Vertical");
+                    if (status.hp >= 0)
+                    {
 
-                    //右押されたら右向き
-                    if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-                    {
-                        playerRightLeftFlag = true;
-                    }
-                    //左押されたら左向き
-                    if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-                    {
-                        playerRightLeftFlag = false;
-                    }
 
-                    //プレイヤーの向きの転換
-                    if (playerRightLeftFlag)
-                    {
-                        this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-                    }
-                    else
-                    {
-                        this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-                    }
-
-                    ////ジャンプ中に横壁に当たった時
-                    if (nowJump)
-                    {
-                        //速度を引いて0に
-                        if(Input.GetKey(KeyCode.RightArrow))
+                        if (!knockBackFlag)
                         {
-                            vec.x = vec.x + (-Math.Abs(vec.x));
-                        }
-                        if(Input.GetKey(KeyCode.LeftArrow))
-                        {
-                            vec.x = vec.x + (Math.Abs(vec.x));
-                        }
-                    }
+                            //十字キーの入力をセット
+                            vec.x = Input.GetAxis("Horizontal");
+                            vec.y = Input.GetAxis("Vertical");
 
-                    //ベクトルxが0.0じゃない場合動いている
-                    if (Mathf.Abs(vec.x) != 0.0f)
-                    {
-                        flag.On((uint)StateFlag.Move);
-                        animator.SetBool("IsWalk", true);
-                    }
-
-                    //ベクトルxが0.0なら止まっている
-                    if (Mathf.Abs(vec.x) == 0.0f)
-                    {
-                        flag.Off((uint)StateFlag.Move);
-                        animator.SetBool("IsWalk", false);
-                    }
-
-                    StealRarity();
-
-                    GiveRarity();
-
-                    if (!flag.Is((uint)StateFlag.Jump))
-                    {
-                        
-                        //落ち始めたら重力を変える
-                        if (!jumpFallFalg)
-                        {
-                            GetComponent<Rigidbody>().AddForce(gravity, ForceMode.Acceleration);
-                        }
-                        else
-                        {
-                            //落下速度制限
-                            if (GetComponent<Rigidbody>().velocity.magnitude < Math.Abs(gravity2.y))
+                            //右押されたら右向き
+                            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
                             {
-                                GetComponent<Rigidbody>().AddForce(gravity2, ForceMode.Acceleration);
+                                playerRightLeftFlag = true;
                             }
-                           
-                        }
+                            //左押されたら左向き
+                            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+                            {
+                                playerRightLeftFlag = false;
+                            }
 
-                        float posY = transform.position.y - lastPos.y;
-                        //落ち始めているかどうか
-                        if (posY > 0)
-                        {
-                            animator.SetBool("IsJump", false);
-                            animator.SetBool("IsJumpDown", true);
-                            jumpFallFalg = true;
-                        }
-                    }
-                    else
-                    {
-                       
-                        animator.SetBool("IsJump", false);
-                        animator.SetBool("IsJumpDown", false);
-                    }
+                            //プレイヤーの向きの転換
+                            if (playerRightLeftFlag)
+                            {
+                                this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+                            }
+                            else
+                            {
+                                this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+                            }
 
-                    Jump(); //ジャンプ
-                    
-                    //zキーをしたら攻撃
-                    if(Input.GetKeyDown(KeyCode.Z))
-                    {
-                        audioSound.PlayOneShot(atk);
-                        if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
-                        {
-                            swordActionFlag = true;
-                        }
-                        else if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Wand"))
-                        {
-                            wandActionFlag = true;
+                            ////ジャンプ中に横壁に当たった時
+                            if (nowJump)
+                            {
+                                //速度を引いて0に
+                                if (Input.GetKey(KeyCode.RightArrow))
+                                {
+                                    vec.x = vec.x + (-Math.Abs(vec.x));
+                                }
+                                if (Input.GetKey(KeyCode.LeftArrow))
+                                {
+                                    vec.x = vec.x + (Math.Abs(vec.x));
+                                }
+                            }
+
+                            //ベクトルxが0.0じゃない場合動いている
+                            if (Mathf.Abs(vec.x) != 0.0f)
+                            {
+                                flag.On((uint)StateFlag.Move);
+                                animator.SetBool("IsWalk", true);
+                            }
+
+                            //ベクトルxが0.0なら止まっている
+                            if (Mathf.Abs(vec.x) == 0.0f)
+                            {
+                                flag.Off((uint)StateFlag.Move);
+                                animator.SetBool("IsWalk", false);
+                            }
+
+                            StealRarity();
+
+                            GiveRarity();
+
+                            if (!flag.Is((uint)StateFlag.Jump))
+                            {
+
+                                //落ち始めたら重力を変える
+                                if (!jumpFallFalg)
+                                {
+                                    GetComponent<Rigidbody>().AddForce(gravity, ForceMode.Acceleration);
+                                }
+                                else
+                                {
+                                    //落下速度制限
+                                    if (GetComponent<Rigidbody>().velocity.magnitude < Math.Abs(gravity2.y))
+                                    {
+                                        GetComponent<Rigidbody>().AddForce(gravity2, ForceMode.Acceleration);
+                                    }
+
+                                }
+
+                                float posY = transform.position.y - lastPos.y;
+                                //落ち始めているかどうか
+                                if (posY > 0)
+                                {
+                                    animator.SetBool("IsJump", false);
+                                    animator.SetBool("IsJumpDown", true);
+                                    jumpFallFalg = true;
+                                }
+                            }
+                            else
+                            {
+
+                                animator.SetBool("IsJump", false);
+                                animator.SetBool("IsJumpDown", false);
+                            }
+
+                            Jump(); //ジャンプ
+
+                            //zキーをしたら攻撃
+                            if (Input.GetKeyDown(KeyCode.Z))
+                            {
+                                audioSound.PlayOneShot(atk);
+                                if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Sword"))
+                                {
+                                    swordActionFlag = true;
+                                }
+                                else if (haveItem[0].gameObject.layer == LayerMask.NameToLayer("Wand"))
+                                {
+                                    wandActionFlag = true;
+                                }
+                                else
+                                {
+                                    axActionFlag = true;
+                                }
+
+                            }
+                            if (swordActionFlag)
+                            {
+                                SwordAttack();
+                            }
+                            if (wandActionFlag)
+                            {
+                                WandAttack();
+                            }
+                            if (axActionFlag)
+                            {
+                                AxAttack();
+                            }
                         }
                         else
                         {
-                            axActionFlag = true;
+                            if (SceneManager.GetActiveScene().name != "TutorialScene")
+                            {
+                                status.hp = status.hp - (int)Damege(enemy1, this);
+
+                            }
+                            damageScript.DamageFlag = true;
+                            KnockBack(knockBackPos);
+
                         }
-                        
+                        //下の赤い線
+                        Debug.DrawLine(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - jumpLine - 10, transform.position.z), Color.red);
+                        Debug.DrawLine(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - jumpLine - 10, transform.position.z), Color.red);
+
+                        //上の青い横の線
+                        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), Color.blue);
+                        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), Color.blue);
+                        //下の青い横の線
+                        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x + 0.5f, transform.position.y - widthLineDownY, transform.position.z), Color.blue);
+                        Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x - 0.5f, transform.position.y - widthLineDownY, transform.position.z), Color.blue);
+
+                        //最後の座標を入れる
+                        lastPos = transform.position;
+
+                        //if (Input.GetKeyDown(KeyCode.Q))
+                        //{
+                        //    SavePlayer.Save(this);
+                        //}
                     }
-                    if(swordActionFlag)
+                    else
                     {
-                        SwordAttack();
-                    }
-                    if(wandActionFlag)
-                    {
-                        WandAttack();
-                    }
-                    if(axActionFlag)
-                    {
-                        AxAttack();
+
                     }
                 }
-                else
-                {
-                    if(SceneManager.GetActiveScene().name != "TutorialScene")
-                    {
-                        status.hp = status.hp - (int)Damege(enemy1, this);
-                        
-                    }
-                    damageScript.DamageFlag = true;
-                    KnockBack(knockBackPos);
-
-                }
-                //下の赤い線
-                Debug.DrawLine(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - jumpLine -10, transform.position.z), Color.red);
-                Debug.DrawLine(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - jumpLine -10, transform.position.z), Color.red);
-
-                //上の青い横の線
-                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x + 0.8f, transform.position.y - widthLineUpY, transform.position.z), Color.blue);
-                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineUpY, transform.position.z), new Vector3(transform.position.x - 0.8f, transform.position.y - widthLineUpY, transform.position.z), Color.blue);
-                //下の青い横の線
-                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x + 0.5f, transform.position.y - widthLineDownY, transform.position.z), Color.blue);
-                Debug.DrawLine(new Vector3(transform.position.x, transform.position.y - widthLineDownY, transform.position.z), new Vector3(transform.position.x - 0.5f, transform.position.y - widthLineDownY, transform.position.z), Color.blue);
-
-                //最後の座標を入れる
-                lastPos = transform.position;
-
-                //if (Input.GetKeyDown(KeyCode.Q))
-                //{
-                //    SavePlayer.Save(this);
-                //}
-            }
-            else
-            {
-               
             }
         }
+
 
         //レアリティを奪う関数
         private void StealRarity()
@@ -537,7 +593,7 @@ namespace Momoya
         public void PlayerRarity()
         {
             int rarityCount = 0;
-             if(status.hp >0)
+            if(status.hp >0)
             {
                 for (int i = 0; i < (int)HaveItem.More; i++)
                 {
@@ -546,12 +602,12 @@ namespace Momoya
 
                 rarity = rarityCount / (int)HaveItem.More;
             }
-             else
-            {
-                rarity = 1;
-            }
+            //else
+            //{
+            //    rarity -=  1;
+            //}
 
-            //Debug.Log("PlayerRarity" + rarity);
+            ////Debug.Log("PlayerRarity" + rarity);
         }
 
         //プレイヤーのステータスを設定する
@@ -578,9 +634,9 @@ namespace Momoya
                 status.hp = maxHP;
             }
             //確認用
-            //Debug.Log("HP" + status.hp);
-            //Debug.Log("Attack" + status.attack);
-            //Debug.Log("Speed" + status.speed);
+            ////Debug.Log("HP" + status.hp);
+            ////Debug.Log("Attack" + status.attack);
+            ////Debug.Log("Speed" + status.speed);
         }
 
         //アイテムの変更
@@ -663,7 +719,7 @@ namespace Momoya
         //ジャンプするための関数
         private void Jump()
         {
-            Debug.Log(flag.Is((uint)StateFlag.Jump));
+            //Debug.Log(flag.Is((uint)StateFlag.Jump));
             //地面についている
             if (Physics.Linecast(new Vector3(transform.position.x + lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x + lineX, transform.position.y - jumpLine -10, transform.position.z), layerMask)||
                 Physics.Linecast(new Vector3(transform.position.x - lineX, transform.position.y, transform.position.z), new Vector3(transform.position.x - lineX, transform.position.y - jumpLine -10, transform.position.z), layerMask))
@@ -743,7 +799,10 @@ namespace Momoya
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX;
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY;
-                
+
+                GetComponent<Rigidbody>().mass = 5;
+
+                goalLineFlag = true;
             }
 
         }

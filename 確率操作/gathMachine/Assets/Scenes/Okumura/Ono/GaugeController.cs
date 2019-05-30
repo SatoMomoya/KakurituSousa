@@ -21,7 +21,7 @@ public class GaugeController : MonoBehaviour
         m_slider = GetComponent<Slider>();
 
         //monster.HP = monster.StartHP;
-        //Debug.Log("入れる" + monster.StartHP);
+        ////Debug.Log("入れる" + monster.StartHP);
     }
 
 
@@ -48,7 +48,7 @@ public class GaugeController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // Debug.Log("今のHP" + m_player.HP);
+        // //Debug.Log("今のHP" + m_player.HP);
     }
 
     public void SetMonster(Momoya.Monster mon)

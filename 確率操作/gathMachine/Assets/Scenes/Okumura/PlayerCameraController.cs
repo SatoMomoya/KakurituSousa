@@ -72,7 +72,7 @@ public class PlayerCameraController : MonoBehaviour
 
         if(!player.GoalFlag())
         {
-            Debug.Log(m_stageChild + "この数");
+            //Debug.Log(m_stageChild + "この数");
             if (m_startFlag == false)
             {
                 m_stageChild = m_autoStage.transform.childCount;
@@ -181,4 +181,10 @@ public class PlayerCameraController : MonoBehaviour
                 m_autoStage.transform.localPosition.z + m_stageZPos);
         }
     }
+
+    public bool GetFlag()
+    {
+        return m_playerDistanceFlag;
+
+} 
 }

@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-C:/Users/s172126/Desktop/新しいフォルダー (3)/確率操作.exe
+C:/Users/s172126/Desktop/確率操作exe/確率操作.exe
 SceneListBegin?
 Assets/Scenes/TitleCopyScene.unity
 Assets/Scenes/SelectScene.unity
@@ -20,6 +20,7 @@ b13de7a0a457cb8e026d4237dc1b5797 Unity.Postprocessing.Runtime.dll:UnityEngine.Re
 f8ee621b2e44efb35cf539348643782d Assembly-CSharp.dll:.IntroCameraController
 cc86a9af559cfc79a5acbaf8c5c6a8d8 Assembly-CSharp.dll:.ResultGo
 8c328a0ffa03c1bcb9332bb39f4f8453 Unity.RenderPipelines.Core.Runtime.dll:UnityEngine.Experimental.Rendering.Volume
+67076fe8de7ac01208e4ab4d1561c160 Assembly-CSharp.dll:.ResultPlayerSprite
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.VisualEffectGraph.Runtime.dll:UnityEditor.VFX.SpawnOverDistance
 01aa15e337e3a9c62f15153dfac6d589 Unity.TextMeshPro.dll:TMPro.TMP_Dropdown
 3b518a918a576a28cab47b156aa5e8ed Assembly-CSharp.dll:Momoya.Enemy
@@ -278,7 +279,7 @@ fb6a1ea36b4f6ef5948d283d93760765 UnityEngine.GoogleAudioSpatializer.dll:UnityEng
 a6c1ceb549e595076ba286f68c242075 Unity.RenderPipelines.HighDefinition.Runtime.dll:UnityEngine.Experimental.Rendering.HDPipeline.HDRenderPipelineEditorResources
 6f8ad5fc86878c78235c4db9af18076b Unity.RenderPipelines.HighDefinition.Runtime.dll:UnityEngine.Experimental.Rendering.HDPipeline.DensityVolume
 b9c6f7358c6c4a116c264d7c7f6f08b1 Unity.RenderPipelines.Lightweight.Runtime.dll:UnityEngine.Experimental.Rendering.LightweightPipeline.LightweightRenderPipelineEditorResources
-26bd730c4bcd7d4916bfe12c33f26894 Assembly-CSharp.dll:Momoya.Player
+80a6bd855ab93b803e2cf26089c26b98 Assembly-CSharp.dll:Momoya.Player
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.RaritySave
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.ScreenController
 a4f0a4f62100f1a4fb5cbe0e00dde83f Unity.TextMeshPro.dll:TMPro.TextMeshProUGUI
@@ -333,4 +334,3 @@ ea97d2d1ef37a085a6917f09bf3daa13 Assembly-CSharp.dll:.GunController
 60f1b089e372e35bead61a4d8a712d27 Unity.VisualEffectGraph.Runtime.dll:UnityEngine.VFX.Utils.VFXSphereBinder
 2388eb9e99b86b3813e7b6dbfe4b3e0c Unity.RenderPipelines.HighDefinition.Runtime.dll:UnityEngine.Experimental.Rendering.UI.DebugUIHandlerContainer
 8d35f16c5022311c6f4d9432be73bfcf Unity.RenderPipelines.HighDefinition.Runtime.dll:UnityEngine.Experimental.Rendering.UI.DebugUIHandlerIndirectFloatField
-67076fe8de7ac01208e4ab4d1561c160 Assembly-CSharp.dll:.ResultPlayerSprite

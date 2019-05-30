@@ -85,7 +85,7 @@ public class SelectIndex : MonoBehaviour
             arrow[1].color = new Color(1, 1,1);
         }
         GetRarity();
-        Debug.Log(rarity.selectGyat);
+
     }
 
     void Move()
